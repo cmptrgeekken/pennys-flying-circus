@@ -3,3 +3,7 @@ before_build:
 deploy:
   provider: Environment
   name: Windows Azure
+  artifact: EveMarket.Web
+artifacts:
+    - path: deploy\EveMarket.Web.zip
+      name: EveMarket.Web
