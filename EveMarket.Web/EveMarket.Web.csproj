@@ -598,7 +598,6 @@
     <Content Include="Content\plugins\WOW-master\demo.html" />
     <Content Include="Content\plugins\WOW-master\spec\javascripts\fixtures\custom.html" />
     <Content Include="Content\plugins\WOW-master\spec\javascripts\fixtures\simple.html" />
-    <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
