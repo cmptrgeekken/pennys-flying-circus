@@ -12,12 +12,12 @@ using EveMarket.Core.Repositories.Db;
 
 namespace EveMarket.Web.Controllers
 {
-    public class OreController : Controller
+    public class CalculatorController : Controller
     {
         private readonly ItemService _itemService;
         private readonly PlayerService _playerService;
 
-        public OreController()
+        public CalculatorController()
         {
             _itemService = new ItemService(new EveDb(), new EveCentral(), new EveMarketDataEntities());
             _playerService = new PlayerService(new EveDb());
@@ -31,7 +31,7 @@ namespace EveMarket.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult ReprocessingCalculator(MineralList desiredMinerals)
+        public ActionResult OreCalculator(MineralList desiredMinerals)
         {
             var skills = _playerService.GetReprocessingSkills();
 
@@ -86,7 +86,7 @@ namespace EveMarket.Web.Controllers
                 }
             }
 
-            return RedirectToAction("ReprocessingCalculator", mineralList);
+            return RedirectToAction("OreCalculator", mineralList);
         }
     }
 }

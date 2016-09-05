@@ -13,7 +13,7 @@ namespace EveMarket.Web.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction("ReprocessingCalculator", "Ore");
+            return RedirectToAction("OreCalculator", "Calculator");
         }
 
         public ActionResult About()

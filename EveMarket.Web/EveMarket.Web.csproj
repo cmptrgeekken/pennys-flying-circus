@@ -307,7 +307,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\OreController.cs" />
+    <Compile Include="Controllers\CalculatorController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -754,8 +754,8 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Player\Skills.cshtml" />
-    <Content Include="Views\Ore\ReprocessingCalculator.cshtml" />
-    <Content Include="Views\Ore\_OrderListModal.cshtml" />
+    <Content Include="Views\Calculator\OreCalculator.cshtml" />
+    <Content Include="Views\Calculator\_OrderListModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

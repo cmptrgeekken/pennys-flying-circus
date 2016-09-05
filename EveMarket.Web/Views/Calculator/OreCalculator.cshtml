@@ -1,13 +1,13 @@
 ﻿@model EveMarket.Web.Models.OreListModel
 
 @{
-    ViewBag.Title = "Reprocessing Calculator";
+    ViewBag.Title = "Ore Calculator";
 }
 
 <section class="bg-19 bg-center bg-cover">
     <div>
         <div class="container section-lg">
-            <h1 class="top-title">Reprocessing Calculator</h1>
+            <h1 class="top-title">Ore Calculator</h1>
         </div>
     </div>
 </section>
@@ -214,7 +214,7 @@
                     <h4 class="modal-title">Paste desired items</h4>
                 </div>
                 <div class="modal-body form-horizontal">
-                    <form method="post" action="@Url.Action("ParseItems", "Ore")">
+                    <form method="post" action="@Url.Action("ParseItems", "Calculator")">
                         <textarea name="TextInput" rows="15" style="width: 100%;" placeholder="Paste desired items here (e.g., 1000 Tritanium)"></textarea>
                         <button type="submit" class="btn btn-primary">
                             Submit
