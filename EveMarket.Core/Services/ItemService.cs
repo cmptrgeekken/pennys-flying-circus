@@ -246,7 +246,7 @@ namespace EveMarket.Core.Services
             var refiningCost = 0;//totalOreVolume*10;
             var refineryStationShippingCost = 0;//totalMineralVolume*5;
             // TODO: Make desired profit configurable
-            var profitSell = buyAllPurchasePrice*1.1m;
+            var profitSell = buyAllPurchasePrice*1.0m;
 
             var predictedSell = profitSell + sourceStagingShippingCost;
             var predictedProfit = predictedSell - buyAllPurchasePrice - sourceStagingShippingCost;

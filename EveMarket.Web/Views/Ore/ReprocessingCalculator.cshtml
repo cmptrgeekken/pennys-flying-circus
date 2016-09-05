@@ -117,7 +117,7 @@
                             <td></td>
                             <td></td>
                             <th class="align-right">Subtotal</th>
-                            <th class="align-right" colspan="2">@Model.OrderSummary.ProfitSell.ToString("#,00.00")</th>
+                            <th class="align-right" colspan="2">@Model.OrderSummary.PurchaseCost.ToString("#,00.00")</th>
                         </tr>
                         <tr>
                             <td></td>
@@ -174,13 +174,6 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <th class="align-right">Subtotal</th>
-                        <th class="align-right">@(Model.OrderSummary.ProfitSell.ToString("#,0.00"))</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
                         <th class="align-right">Shipping</th>
                         <th class="align-right">@((Model.OrderSummary.SourceStagingShippingCost).ToString("#,0.00"))</th>
                         <td></td>
@@ -190,13 +183,6 @@
                         <td></td>
                         <th class="align-right">Grand Total</th>
                         <th class="align-right">@(Model.OrderSummary.PredictedSell.ToString("#,0.00"))</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <th class="align-right">Profit</th>
-                        <th class="align-right">@(Model.OrderSummary.PredictedProfit.ToString("#,0.00"))</th>
                         <td></td>
                     </tr>
                 </table>
