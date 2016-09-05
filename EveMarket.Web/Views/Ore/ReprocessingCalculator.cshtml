@@ -1,92 +1,97 @@
-﻿@using EveMarket.Core.Enums
-@model EveMarket.Web.Models.OreListModel
+﻿@model EveMarket.Web.Models.OreListModel
 
 @{
     ViewBag.Title = "Reprocessing Calculator";
 }
 
-
+<section class="bg-19 bg-center bg-cover">
+    <div>
+        <div class="container section-lg">
+            <h1 class="top-title">Reprocessing Calculator</h1>
+        </div>
+    </div>
+</section>
 
 <section class="container section-lg">
 
-<div class="row">
+    <div class="row">
 
-    <div class="col-md-4">
-        <form class="form-horizontal" method="GET">
-            <h2>Desired Minerals</h2>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Tritanium</label>
-                <div class="col-sm-6">
-                    <div class="control">
-                        @Html.TextBoxFor(m => m.DesiredMinerals.Tritanium, new {@class = "form-control"})
+        <div class="col-md-4">
+            <form class="form-horizontal" method="GET">
+                <h2><a href="#" data-toggle="modal" data-target="#modal-clipboardImport" class="fa fa-clipboard" title="Import from Clipboard"></a> Desired Minerals</h2>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Tritanium</label>
+                    <div class="col-sm-6">
+                        <div class="control">
+                            @Html.TextBoxFor(m => m.DesiredMinerals.Tritanium, new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Pyerite</label>
-                <div class="col-sm-6">
-                    <div class="control">
-                        @Html.TextBoxFor(m => m.DesiredMinerals.Pyerite, new {@class = "form-control"})
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Pyerite</label>
+                    <div class="col-sm-6">
+                        <div class="control">
+                            @Html.TextBoxFor(m => m.DesiredMinerals.Pyerite, new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Mexallon</label>
-                <div class="col-sm-6">
-                    <div class="control">
-                        @Html.TextBoxFor(m => m.DesiredMinerals.Mexallon, new {@class = "form-control"})
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Mexallon</label>
+                    <div class="col-sm-6">
+                        <div class="control">
+                            @Html.TextBoxFor(m => m.DesiredMinerals.Mexallon, new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Isogen</label>
-                <div class="col-sm-6">
-                    <div class="control">
-                        @Html.TextBoxFor(m => m.DesiredMinerals.Isogen, new {@class = "form-control"})
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Isogen</label>
+                    <div class="col-sm-6">
+                        <div class="control">
+                            @Html.TextBoxFor(m => m.DesiredMinerals.Isogen, new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Nocxium</label>
-                <div class="col-sm-6">
-                    <div class="control">
-                        @Html.TextBoxFor(m => m.DesiredMinerals.Nocxium, new {@class = "form-control"})
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Nocxium</label>
+                    <div class="col-sm-6">
+                        <div class="control">
+                            @Html.TextBoxFor(m => m.DesiredMinerals.Nocxium, new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Zydrine</label>
-                <div class="col-sm-6">
-                    <div class="control">
-                        @Html.TextBoxFor(m => m.DesiredMinerals.Zydrine, new {@class = "form-control"})
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Zydrine</label>
+                    <div class="col-sm-6">
+                        <div class="control">
+                            @Html.TextBoxFor(m => m.DesiredMinerals.Zydrine, new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Megacyte</label>
-                <div class="col-sm-6">
-                    <div class="control">
-                        @Html.TextBoxFor(m => m.DesiredMinerals.Megacyte, new {@class = "form-control"})
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Megacyte</label>
+                    <div class="col-sm-6">
+                        <div class="control">
+                            @Html.TextBoxFor(m => m.DesiredMinerals.Megacyte, new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Morphite</label>
-                <div class="col-sm-6">
-                    <div class="control">
-                        @Html.TextBoxFor(m => m.DesiredMinerals.Morphite, new {@class = "form-control"})
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Morphite</label>
+                    <div class="col-sm-6">
+                        <div class="control">
+                            @Html.TextBoxFor(m => m.DesiredMinerals.Morphite, new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-9">
-                    <button type="submit" class="btn btn-primary">
-                        Submit
-                    </button>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-primary">
+                            Submit
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
         @if (Model.OrderSummary != null)
         {
             <div class="col-md-6">
@@ -135,69 +140,88 @@
                 </div>
             </div>
         }
-</div>
-@if (Model.OrderSummary != null)
-{
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Ores to Purchase</h2>
-            <div class="form-group">
-                <table class="table table-bordered">
-                    <tr>
-                        <th>Ore</th>
-                        <th class="align-right">Qty</th>
-                        <th class="align-right">Volume</th>
-                        <th class="align-right">Total</th>
-                        <th class="align-right">Total (Optimal)</th>
-                    </tr>
-                    @foreach (var ore in Model.OrderSummary.Ores)
-                    {
+    </div>
+    @if (Model.OrderSummary != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Ores to Purchase</h2>
+                <div class="form-group">
+                    <table class="table table-bordered">
                         <tr>
-                            <th>@ore.Name</th>
-                            <td class="align-right">@(Math.Ceiling(ore.Qty).ToString("#,0"))</td>
-                            <td class="align-right">@((ore.Volume*ore.Qty).ToString("#,0.00")) m<sup>3</sup></td>
-                            <td class="align-right">
-                                <a href="#" data-toggle="modal" data-target="#modal-@ore.Id">
-                                    @ore.TotalPrice.ToString("#,0.00")
-                                </a>
-                            </td>
-                            <td class="align-right@(ore.TotalPriceBest < ore.TotalPrice * .99m ? " buy-best" : "")">@ore.TotalPriceBest.ToString("#,0.00")</td>
+                            <th>Ore</th>
+                            <th class="align-right">Qty</th>
+                            <th class="align-right">Volume</th>
+                            <th class="align-right">Total</th>
+                            <th class="align-right">Total (Optimal)</th>
                         </tr>
-                    }
-                    <tr>
-                        <td class=""></td>
-                        <th class="align-right">Totals</th>
-                        <th class="align-right">@Model.OrderSummary.TotalOreVolume.ToString("#,0.00") m<sup>3</sup></th>
-                        <th class="align-right">@Model.OrderSummary.PurchaseCost.ToString("#,0.00")</th>
-                        <th class="align-right">@Model.OrderSummary.PurchaseCostBest.ToString("#,0.00")</th>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <th class="align-right">Shipping</th>
-                        <th class="align-right">@((Model.OrderSummary.SourceStagingShippingCost).ToString("#,0.00"))</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <th class="align-right">Grand Total</th>
-                        <th class="align-right">@(Model.OrderSummary.PredictedSell.ToString("#,0.00"))</th>
-                        <td></td>
-                    </tr>
-                </table>
+                        @foreach (var ore in Model.OrderSummary.Ores)
+                        {
+                            <tr>
+                                <th>@ore.Name</th>
+                                <td class="align-right">@(Math.Ceiling(ore.Qty).ToString("#,0"))</td>
+                                <td class="align-right">@((ore.Volume * ore.Qty).ToString("#,0.00")) m<sup>3</sup></td>
+                                <td class="align-right">
+                                    <a href="#" data-toggle="modal" data-target="#modal-@ore.Id">
+                                        @ore.TotalPrice.ToString("#,0.00")
+                                    </a>
+                                </td>
+                                <td class="align-right@(ore.TotalPriceBest < ore.TotalPrice * .99m ? " buy-best" : "")">@ore.TotalPriceBest.ToString("#,0.00")</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td class=""></td>
+                            <th class="align-right">Totals</th>
+                            <th class="align-right">@Model.OrderSummary.TotalOreVolume.ToString("#,0.00") m<sup>3</sup></th>
+                            <th class="align-right">@Model.OrderSummary.PurchaseCost.ToString("#,0.00")</th>
+                            <th class="align-right">@Model.OrderSummary.PurchaseCostBest.ToString("#,0.00")</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <th class="align-right">Shipping</th>
+                            <th class="align-right">@((Model.OrderSummary.SourceStagingShippingCost).ToString("#,0.00"))</th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <th class="align-right">Grand Total</th>
+                            <th class="align-right">@(Model.OrderSummary.PredictedSell.ToString("#,0.00"))</th>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+
+@section Modals{
+    @if (Model.OrderSummary != null)
+    {
+        foreach (var ore in Model.OrderSummary.Ores)
+        {
+            @Html.Partial("_OrderListModal", ore)
+        }
+    }
+    <div class="modal fade" id="modal-clipboardImport" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Paste desired items</h4>
+                </div>
+                <div class="modal-body form-horizontal">
+                    <form method="post" action="@Url.Action("ParseItems", "Ore")">
+                        <textarea name="TextInput" rows="15" style="width: 100%;" placeholder="Paste desired items here (e.g., 1000 Tritanium)"></textarea>
+                        <button type="submit" class="btn btn-primary">
+                            Submit
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-}
-</section>
-
-@if (Model.OrderSummary != null)
-{
-@section Modals{
-    @foreach (var ore in Model.OrderSummary.Ores)
-    {
-        @Html.Partial("_OrderListModal", ore)
-    }
-}
 }
