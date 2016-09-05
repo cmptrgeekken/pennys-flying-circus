@@ -26,3 +26,7 @@ tr:nth-child(odd).market-order-buy>td, .table-striped>tbody>tr:nth-child(odd).ma
 .buy-best {
     background-color: #00FF00;
 }
+
+.bg-19 {
+    background-image: url(../img/shots/orca-boost.png);
+}
