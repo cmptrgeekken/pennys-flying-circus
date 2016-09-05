@@ -1,0 +1,179 @@
+<nav class="navbar navbar-trn navbar-fixed-top" role="navigation" id="navbarSettings">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.php">Dragon<span class="text-primary">fly</span></a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right ">
+
+                <!--Home Pages -->
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0">Home
+                    </a>
+                    <ul class="dropdown-menu ">
+                        <li>
+                            <a href="index.php">Home - Option 1</a>
+                        </li>
+
+                        <li>
+                            <a href="index-2.php">Home - Option 2</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--Pages-->
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0">Pages</a>
+
+                    <ul class="dropdown-menu">
+
+                        <!-- About Pages -->
+                        <li class="dropdown-submenu">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">About Pages</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="about-us-v1.php">About Us I</a>
+                                </li>
+                                <li>
+                                    <a href="about-us-v2.php">About Us II</a>
+                                </li>
+                                <li>
+                                    <a href="about-us-v3.php">About Us III</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown-submenu">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">Services Pages</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="services-v1.php">Services I</a>
+                                </li>
+                                <li>
+                                    <a href="services-v2.php">Services II</a>
+                                </li>
+                                <li>
+                                    <a href="services-v3.php">Services III</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="pricing-tables.php">Pricing Tables</a>
+                        </li>
+
+                        <li>
+                            <a href="contact.php">Contact</a>
+                        </li>
+
+                        <li>
+                            <a href="support.php">Support</a>
+                        </li>
+                        
+                        <li>
+                            <a href="our-team.php">Our Team</a>
+                        </li>
+
+                        <li>
+                            <a href="sign-in.php">Sign In</a>
+                        </li>
+                        <li>
+                            <a href="sign-up.php">Sign Up</a>
+                        </li>
+                    
+                        <li>
+                            <a href="404.php">404 Error </a>
+                        </li>
+
+
+                    </ul>
+                </li>
+
+                <!--Portfolio-->
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0">Portfolio
+                    </a>
+                    <ul class="dropdown-menu ">
+                        <li>
+                            <a href="portfolio-v1.php">Portfolio Filter I</a>
+                        </li>
+
+                        <li>
+                            <a href="portfolio-v2.php">Portfolio Filter II</a>
+                        </li>
+                        <li>
+                            <a href="portfolio-v3.php">Portfolio Page III</a>
+                        </li>
+
+                        <li class="divider"></li>
+
+                        <li>
+                            <a href="portfolio-item-v1.php">Portfolio Item I</a>
+                        </li>
+
+                        <li>
+                            <a href="portfolio-item-v2.php">Portfolio Item II</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Blog -->
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0">Blog
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="blog-page.php">Blog Page</a>
+                        </li>
+                        <li>
+                            <a href="blog-item.php">Blog Item</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--Get Started-->
+                <li class="dropdown">
+                    <a href="get-started/index.php" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0">Get Started
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="get-started/index.php">How to Start - Docs</a>
+                        </li>
+                        <li>
+                            <a href="get-started/elements.php#here">Elements - Blocks of Code</a>
+                        </li>
+                        <li>
+                            <a href="get-started/changelog.php#here">Changelog</a>
+                        </li>
+                        <li>
+                            <a href="get-started/php-tutorial.php#here">PHP Tutorial</a>
+                        </li>
+                        <li>
+                            <a href="get-started/license-and-credits.php#here">Licence &amp; Credits</a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <!-- Sidebar -->
+                <li class="dropdown hidden-xs">
+                    <a href="javascript:void(0);" id="sidebar-btn">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</nav>
+
+<!-- If navbar is fixed to top and it has the class navbar-default or navbar-inverse this div will add space below the navbar-->
+<div id="navbarSpaceBottom"></div>

@@ -1,0 +1,47 @@
+<div class="style-switcher">
+    <i class="fa fa-gear switcher-icon"></i>
+    <div class="body">
+        <h4>Change Color</h4>
+        <ul class="list-unstyled colors">
+            <li class="blue"></li>
+            <li class="light-blue"></li>
+            <li class="green"></li>
+            <li class="red"></li>
+            <li class="yellow"></li>
+        </ul>
+        <div class="space-md"></div>
+        <h4>Navigation</h4>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="btn-group  btn-block">
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle btn-block" data-toggle="dropdown">
+                        Theme <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0);" id="navDark">Dark</a>
+                        </li>
+                        <li><a href="javascript:void(0);" id="navLight">Light</a>
+                        </li>
+                        <li><a href="javascript:void(0);" id="navTrn">Transparent</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="btn-group  btn-block">
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle btn-block" data-toggle="dropdown">
+                        Postion <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0);" id="navRelative">Relative</a>
+                        </li>
+                        <li><a href="javascript:void(0);" id="navFixed">Fixed</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="space-md"></div>
+
+    </div>
+</div>

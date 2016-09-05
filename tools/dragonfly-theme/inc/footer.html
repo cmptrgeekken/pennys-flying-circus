@@ -1,0 +1,96 @@
+<footer class="footer">
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                    <h4>Contact</h4>
+                    <ul class="info-list md-list i-primary">
+                        <li>
+                            <i class="fa fa-envelope fa-fw"></i>
+                            <a href="mailto:influence.bootstrap@gmail.com">influence.bootstrap@gmail.com</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-phone fa-fw"></i>
+                            +21 902 920 889
+                        </li>
+                        <li>
+                            <i class="fa fa-map-marker fa-fw"></i>
+                            885 3rd Ave, NY 10022
+                        </li>
+                    </ul>
+                </div>
+                <div class="space-sm visible-sm visible-xs"></div>
+                <div class="col-md-4 col-lg-4 col-xs-12">
+                    <h4>Quick Links</h4>
+                    <ul class="info-list md-list i-primary">
+                        <li>
+                            <i class="fa fa-angle-right fa-fw"></i>
+                            <a href="#">
+                                <span class="link-title">About Us</span>- Who we are</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-angle-right fa-fw"></i>
+                            <a href="#">
+                                <span class="link-title">Services</span>- What we do</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-angle-right fa-fw"></i>
+                            <a href="#">
+                                <span class="link-title">Our Team</span>- Meet our team</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-angle-right fa-fw"></i>
+                            <a href="#">
+                                <span class="link-title">Portfolio</span>- Our work</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-angle-right fa-fw"></i>
+                            <a href="#">
+                                <span class="link-title">Blog</span>- Breaking news</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="space-sm visible-sm visible-xs"></div>
+                <div class="col-md-4 col-lg-4  col-xs-12">
+                    <h4>About Us</h4>
+                    <p>Temporibus autem quibusdam et aut officiis debitis ut et voluptates repudiandae sint et molestiae non recusandae.</p>
+                    <div class="space-sm"></div>
+                    <h4>Follow Us</h4>
+                    <ul class="circle-icons icons-list">
+                        <li>
+                            <a href="#" title="Follow us">
+                                <i class="fa fa-google-plus"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" title="Follow us">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" title="Follow us">
+                                <i class="fa fa-tumblr"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" title="Follow us">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" title="Follow us">
+                                <i class="fa fa-youtube-play"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <div class="container">
+            <p>© 2014 Dragonfly. All rights reserved. Theme by Jiri Cermak.</p>
+        </div>
+    </div>
+</footer>

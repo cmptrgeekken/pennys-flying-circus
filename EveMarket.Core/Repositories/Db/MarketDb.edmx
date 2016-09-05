@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="EveMarketDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="MarketOrders">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="TypeId" Type="int" Nullable="false" />
+          <Property Name="StationId" Type="int" Nullable="false" />
+          <Property Name="Volume" Type="int" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="LastUpdate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MineralQuotes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="QuoteLookup" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="PlayerName" Type="nvarchar(max)" />
+          <Property Name="TritaniumQty" Type="int" />
+          <Property Name="PyeriteQty" Type="int" />
+          <Property Name="MexallonQty" Type="int" />
+          <Property Name="IsogenQty" Type="int" />
+          <Property Name="NocxiumQty" Type="int" />
+          <Property Name="ZydrineQty" Type="int" />
+          <Property Name="MegacyteQty" Type="int" />
+          <Property Name="MorphiteQty" Type="int" />
+          <Property Name="Subtotal" Type="decimal" Precision="16" Scale="2" />
+          <Property Name="Shipping" Type="decimal" Precision="16" Scale="2" />
+          <Property Name="Total" Type="decimal" Precision="16" Scale="2" />
+          <Property Name="SubmissionDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="EveMarketDataModelStoreContainer">
+          <EntitySet Name="MarketOrders" EntityType="Self.MarketOrders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MineralQuotes" EntityType="Self.MineralQuotes" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EveMarketDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="MarketOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="TypeId" Type="Int32" Nullable="false" />
+          <Property Name="StationId" Type="Int32" Nullable="false" />
+          <Property Name="Volume" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="7" />
+        </EntityType>
+        <EntityType Name="MineralQuote">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="QuoteLookup" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PlayerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TritaniumQty" Type="Int32" />
+          <Property Name="PyeriteQty" Type="Int32" />
+          <Property Name="MexallonQty" Type="Int32" />
+          <Property Name="IsogenQty" Type="Int32" />
+          <Property Name="NocxiumQty" Type="Int32" />
+          <Property Name="ZydrineQty" Type="Int32" />
+          <Property Name="MegacyteQty" Type="Int32" />
+          <Property Name="Subtotal" Type="Decimal" Precision="16" Scale="2" />
+          <Property Name="Shipping" Type="Decimal" Precision="16" Scale="2" />
+          <Property Name="Total" Type="Decimal" Precision="16" Scale="2" />
+          <Property Name="SubmissionDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="MorphiteQty" Type="Int32" />
+        </EntityType>
+        <EntityContainer Name="EveMarketDataEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="MarketOrders" EntityType="Self.MarketOrder" />
+          <EntitySet Name="MineralQuotes" EntityType="Self.MineralQuote" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EveMarketDataModelStoreContainer" CdmEntityContainer="EveMarketDataEntities">
+          <EntitySetMapping Name="MarketOrders">
+            <EntityTypeMapping TypeName="EveMarketDataModel.MarketOrder">
+              <MappingFragment StoreEntitySet="MarketOrders">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="StationId" ColumnName="StationId" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MineralQuotes">
+            <EntityTypeMapping TypeName="EveMarketDataModel.MineralQuote">
+              <MappingFragment StoreEntitySet="MineralQuotes">
+                <ScalarProperty Name="MorphiteQty" ColumnName="MorphiteQty" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="QuoteLookup" ColumnName="QuoteLookup" />
+                <ScalarProperty Name="PlayerName" ColumnName="PlayerName" />
+                <ScalarProperty Name="TritaniumQty" ColumnName="TritaniumQty" />
+                <ScalarProperty Name="PyeriteQty" ColumnName="PyeriteQty" />
+                <ScalarProperty Name="MexallonQty" ColumnName="MexallonQty" />
+                <ScalarProperty Name="IsogenQty" ColumnName="IsogenQty" />
+                <ScalarProperty Name="NocxiumQty" ColumnName="NocxiumQty" />
+                <ScalarProperty Name="ZydrineQty" ColumnName="ZydrineQty" />
+                <ScalarProperty Name="MegacyteQty" ColumnName="MegacyteQty" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+                <ScalarProperty Name="Shipping" ColumnName="Shipping" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,100 @@
+<div class="sidebar-off hidden-xs sidebar">
+    <div class="wrap">
+
+        <!--<a id="sidebar-close" title="Close sidebar">
+			<div class="clearfix">
+				<h2 class="title">Side Menu</h2>
+				<div class="close-icon">
+					<span class="close-a"></span>
+					<span class="close-b"></span>
+				</div>
+			</div>
+		</a>-->
+
+        <div class="form-lg">
+            <div class="input-group all-trn" role="search">
+                <input type="text" class="form-control" placeholder="Search">
+                <span class="input-group-btn">
+						<button class="btn btn-all-trn" title="Search" type="button">
+							<i class="fa fa-search"></i>
+                    </button>
+            		</span> 
+            </div>
+        </div>
+
+        <div class="space-sm"></div>
+
+        <h4>Languages</h4>
+        <ul class="info-list sm-list lang">
+            <li class="active">
+                <i class="fa fa-angle-right fa-fw"></i>
+                <a href="#">English</a>
+                <i class="fa fa-check fa-fw"></i>
+            </li>
+            <li>
+                <i class="fa fa-angle-right fa-fw"></i>
+                <a href="#">Germany</a>
+                <i class="fa fa-check fa-fw"></i>
+            </li>
+            <li>
+                <i class="fa fa-angle-right fa-fw"></i>
+                <a href="#">Spanish</a>
+                <i class="fa fa-check fa-fw"></i>
+            </li>
+            <li>
+                <i class="fa fa-angle-right fa-fw"></i>
+                <a href="#">French</a>
+                <i class="fa fa-check fa-fw"></i>
+            </li>
+        </ul>
+
+        <div class="space"></div>
+
+        <h4>Social Media</h4>
+        <ul class="icons-list circle-icons m-no-bottom">
+            <li>
+                <a href="#" title="Follow us">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#" title="Follow us">
+                    <i class="fa fa-twitter"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#" title="Follow us">
+                    <i class="fa fa-tumblr"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#" title="Follow us">
+                    <i class="fa fa-facebook"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#" title="Follow us">
+                    <i class="fa fa-youtube-play"></i>
+                </a>
+            </li>
+        </ul>
+
+        <div class="space"></div>
+
+        <h4>Contact</h4>
+        <ul class="info-list sm-list">
+            <li>
+                <i class="fa fa-envelope fa-fw"></i>
+                <a class="text-muted" href="mailto:influence.bootstrap@gmail.com">support@example.com</a>
+            </li>
+            <li>
+                <i class="fa fa-phone fa-fw"></i>
+                +21 902 920 889
+            </li>
+            <li>
+                <i class="fa fa-map-marker fa-fw"></i>
+                885 3rd Ave, NY 10022
+            </li>
+        </ul>
+    </div>
+</div>

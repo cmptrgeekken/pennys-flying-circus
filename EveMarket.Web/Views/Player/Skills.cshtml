@@ -1,0 +1,64 @@
+﻿@model EveMarket.Web.Models.CharacterSkillsViewModel
+<section class="section-lg bg-grey">
+    <div class="container">
+        <ul class="lg-tabs">
+            <li class="active">
+                <a href="#reprocessing" data-toggle="tab">
+                    <h3>Reprocessing Skills</h3>
+                </a>
+            </li>
+            <li>
+                <a href="#market" data-toggle="tab">
+                    <h3>Market Skills</h3>
+                </a>
+            </li>
+        </ul>
+        <div class="space-lg"></div>
+        <form class="form-horizontal" role="form">
+            <div class="tab-content lg-tab-content">
+                <div class="tab-pane active" id="reprocessing">
+                    @foreach (var skill in Model.ReprocessingSkills)
+                    {
+                        <div class="form-group icon">
+                            <input type="hidden" name="skill-id[]" value="@skill.SkillId" />
+                            <label class="col-sm-3 control-label">@skill.SkillName</label>
+                            <div class="col-sm-2">
+                                <div class="control">
+                                    <select class="form-control dropdown" name="skill-level[]">
+                                        <option value="0">None</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="tab-pane" id="market">
+                    @foreach (var skill in Model.MarketingSkills)
+                    {
+                        <div class="form-group icon">
+                            <input type="hidden" name="skill-id[]" value="@skill.SkillId" />
+                            <label class="col-sm-3 control-label">@skill.SkillName</label>
+                            <div class="col-sm-2">
+                                <div class="control">
+                                    <select class="form-control dropdown" name="skill-level[]">
+                                        <option value="0">None</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

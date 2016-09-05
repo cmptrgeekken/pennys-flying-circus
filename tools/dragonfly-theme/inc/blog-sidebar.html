@@ -1,0 +1,145 @@
+<div class="simple-box ">
+    
+    <div class="input-group form-lg " role="search">
+        <input type="text" class="form-control" placeholder="Find answer">
+        <span class="input-group-btn">
+            <button class="btn btn-primary" title="Search" type="button">
+                <i class="fa fa-search"></i>
+            </button>
+        </span>
+    </div>
+
+    <ul class="circle-icons text-center icons-list" style="margin-top: 20px;">
+        <li>
+            <a href="#" title="Follow us">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#" title="Follow us">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#" title="Follow us">
+                <i class="fa fa-tumblr"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#" title="Follow us">
+                <i class="fa fa-facebook"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="categories simple-box">
+    <h3>Categories</h3>
+    <ul class="list-unstyled">
+        <li>
+            <i class="fa fa-angle-right fa-fw"></i>
+            <a href="#" title="Category Business">Business</a>
+        </li>
+        <li>
+            <i class="fa fa-angle-right fa-fw"></i>
+            <a href="#" title="Category photos">Photo</a>
+        </li>
+        <li>
+            <i class="fa fa-angle-right fa-fw"></i>
+            <a href="#" title="Category Education">Education</a>
+        </li>
+        <li>
+            <i class="fa fa-angle-right fa-fw"></i>
+            <a href="#" title="Category Music">Music</a>
+        </li>
+        <li>
+            <i class="fa fa-angle-right fa-fw"></i>
+            <a href="#" title="Category Movies">Movies</a>
+        </li>
+        <li>
+            <i class="fa fa-angle-right fa-fw "></i>
+            <a href="#" title="Category Internet">Internet</a>
+        </li>
+    </ul>
+</div>
+
+<div class="tags simple-box">
+    <h3>Tags</h3>
+    <ul class="list-unstyled">
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">Music</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">Movies</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">Radio</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">Internet</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">Business</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">People</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">Photo</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">USA</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">Canada</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">Mexiko</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">Nature</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">City</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">Light</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">Dark</a>
+        </li>
+        <li>
+            <i class="fa fa-tags"></i>
+            <a href="#">Education</a>
+        </li>
+    </ul>
+</div>
+
+<div class="simple-box">
+    <h3>Subscribe Us</h3>
+    <div class="input-group icon">
+        <div class="control">
+            <input type="text" class="form-control" placeholder="Email Address">
+            <i class="fa fa-bullhorn"></i>
+        </div>
+        <span class="input-group-btn">
+            <button class="btn btn-primary only-icon " type="button">
+                <i class="fa fa-check"></i>
+            </button>
+        </span>
+    </div>
+</div>

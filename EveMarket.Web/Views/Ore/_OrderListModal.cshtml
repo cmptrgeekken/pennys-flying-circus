@@ -1,0 +1,52 @@
+﻿@model EveMarket.Core.Models.BaseMarketItem
+<div class="modal fade" id="modal-@Model.Id" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Market for @Model.Name (Need @Model.Qty.ToString("#,0") Items)</h4>
+            </div>
+            <div class="modal-body modal-body-scroll">
+                <table class="table table-striped">
+                    <tr>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Location</th>
+                    </tr>
+                    @{
+                        var remainingQty = (int)Model.Qty;
+                        foreach (var order in Model.Pricing.MarketOrders)
+                        {
+                            var purchase = false;
+                            var qtyToBuy = 0;
+                            if (!Model.Pricing.AllowedStationIds.Any() || Model.Pricing.AllowedStationIds.Contains(order.Location.Id))
+                            {
+                                purchase = remainingQty > 0;
+                                qtyToBuy = Math.Min(remainingQty, order.Volume);
+                                remainingQty -= qtyToBuy;
+                            }
+                            <tr class="@(purchase ? "market-order-buy" : null)">
+                                <td class="align-right">
+                                    <div>@order.Volume.ToString("#,0")</div>
+                                    @if (qtyToBuy > 0)
+                                    {
+                                        <div><abbr title="Quantity to Purchase">@qtyToBuy.ToString("#,0")</abbr></div>
+                                    }
+                                </td>
+                                <td class="align-right">
+                                    <div>@order.Price.ToString("#,0.00") ISK</div>
+                                    @if (qtyToBuy > 0)
+                                    {
+                                        <div><abbr title="Purchase Cost">@((qtyToBuy * order.Price).ToString("#,0.00")) ISK</abbr></div>
+                                    }
+                                </td>
+                                <td>@order.Location.Name</td>
+                            </tr>
+                        }
+                    }
+                    
+                </table>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

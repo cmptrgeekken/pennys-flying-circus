@@ -1,0 +1,28 @@
+﻿.modal-body-scroll {
+    height: 400px;
+    overflow-y: auto;
+}
+
+.modal-dialog {
+    width: 850px;
+}
+
+.market-order-buy td {
+    background-color: #00ff7f !important;
+}
+
+.market-order-buy abbr {
+    font-weight: bold;
+}
+
+tr:nth-child(odd).market-order-buy>td, .table-striped>tbody>tr:nth-child(odd).market-order-buy>th {
+    background-color: #00ff00 !important;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.buy-best {
+    background-color: #00FF00;
+}

@@ -1,0 +1,55 @@
+<!--Back to top-->
+<a href="#" class="back-to-top">
+    <i class="fa fa-angle-up"></i>
+</a>
+
+<!-- Modernizr -->
+<script src="assets/js/min/modernizr.custom.min.js"></script>
+
+<!-- jQuery -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<!-- Bootstrap Plugin - open dropdown on hover -->
+<script src="assets/js/min/bootstrap-hover-dropdown.min.js"></script>
+
+<!-- LESS preprocessor -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.4/less.min.js"></script>
+
+<!-- WOW.js - loading animations -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/wow/0.1.6/wow.min.js"></script>
+
+<!-- Knobs - our skills -->
+<script src="http://cdn.jsdelivr.net/jquery.knob/1.2.9/jquery.knob.min.js"></script>
+
+<!-- Slippry - Slideshow -->
+<script src="assets/js/min/slippry.min.js"></script>
+
+<!-- Mixitup plugin - Portfolio Filter Grid -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/mixitup/1.5.6/jquery.mixitup.min.js"></script>
+
+<!-- Make sticky whatever elements -->
+<script src="http://cdn.jsdelivr.net/jquery.sticky/1.0.0/jquery.sticky.min.js"></script>
+
+<!-- Smooth sroll -->
+<script src="http://cdn.jsdelivr.net/jquery.nicescroll/3.5.4/jquery.nicescroll.min.js"></script>
+
+<!-- Contact Form -->
+<script src="assets/js/min/contact-form.min.js"></script>
+
+<!-- Must be last of all scripts -->
+<script src="assets/js/min/scripts.min.js"></script>
+
+<!--[if lt IE 9]>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<!-- Side Menu -->
+<?php include( "inc/sidebar.php"); ?>
+
+<!-- Style Switcher -->
+<?php include( "inc/style-switcher.php"); ?>
