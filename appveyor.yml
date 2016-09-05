@@ -1,3 +1,5 @@
+before_build:
+  - nuget restore
 deploy:
   provider: Environment
   name: Windows Azure
