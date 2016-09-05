@@ -1,9 +1,14 @@
+version: 1.0.{build}
+build:
+  publish_wap: true
+  verbosity: minimal
 before_build:
   - nuget restore
+artifacts:
+    - path: build\_PublishedWebsites\Website_Package\Website.zip
+      name: EveMarket.Web
+      type: WebDeployPackage
 deploy:
   provider: Environment
   name: Windows Azure
   artifact: EveMarket.Web
-artifacts:
-    - path: deploy\EveMarket.Web.zip
-      name: EveMarket.Web
