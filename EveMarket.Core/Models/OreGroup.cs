@@ -17,9 +17,10 @@ namespace EveMarket.Core.Models
                 var allMarketOrders = Ores.SelectMany(o => o.Pricing.AllowedMarketOrders.Select(mo => new AdjustedMarketOrder
                 {
                     Price = mo.Price,
-                    AdjustedPrice = mo.Price * (1-o.YieldModifier),
+                    AdjustedPrice = mo.Price * (decimal)(1-o.YieldModifier),
                     Volume = mo.Volume,
-                    Location = mo.Location,
+                    StationId = mo.StationId,
+                    StationName = mo.StationName,
                     AssociatedOre = o,
                 })).OrderBy(mo => mo.AdjustedPrice);
 

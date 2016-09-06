@@ -19,7 +19,7 @@
                         {
                             var purchase = false;
                             var qtyToBuy = 0;
-                            if (!Model.Pricing.AllowedStationIds.Any() || Model.Pricing.AllowedStationIds.Contains(order.Location.Id))
+                            if (!Model.Pricing.AllowedStationIds.Any() || Model.Pricing.AllowedStationIds.Contains(order.StationId))
                             {
                                 purchase = remainingQty > 0;
                                 qtyToBuy = Math.Min(remainingQty, order.Volume);
@@ -40,7 +40,7 @@
                                         <div><abbr title="Purchase Cost">@((qtyToBuy * order.Price).ToString("#,0.00")) ISK</abbr></div>
                                     }
                                 </td>
-                                <td>@order.Location.Name</td>
+                                <td>@order.StationName</td>
                             </tr>
                         }
                     }

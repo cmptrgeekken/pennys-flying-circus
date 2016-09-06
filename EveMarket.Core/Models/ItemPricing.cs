@@ -3,6 +3,7 @@ using eZet.EveLib.EveMarketDataModule.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using EveMarket.Core.Repositories.Db;
 
 namespace EveMarket.Core.Models
 {
@@ -10,11 +11,11 @@ namespace EveMarket.Core.Models
     {
         public long RegionId { get; set; }
         public IEnumerable<long> AllowedStationIds { get; set; }
-        public IEnumerable<ItemMarketOrder> MarketOrders { get; set; }
+        public IEnumerable<MarketOrder> MarketOrders { get; set; }
 
-        public IEnumerable<ItemMarketOrder> AllowedMarketOrders
+        public IEnumerable<MarketOrder> AllowedMarketOrders
         {
-            get { return MarketOrders.Where(o => AllowedStationIds.Contains(o.Location.Id)); }
+            get { return MarketOrders.Where(o => AllowedStationIds.Contains(o.StationId)); }
         }
         public ItemHistory ItemHistory { get; set; }
 
@@ -23,10 +24,12 @@ namespace EveMarket.Core.Models
             get { return MarketOrders.Sum(o => o.Volume); }
         }
 
-        public double CalculateBestTotal(int qty)
+        public DateTime? LastUpdated { get; set; }
+
+        public decimal CalculateBestTotal(int qty)
         {
             var remainingQty = qty;
-            var ttlCost = 0.0;
+            var ttlCost = 0.0m;
             foreach(var order in AllowedMarketOrders)
             {
 
@@ -44,7 +47,7 @@ namespace EveMarket.Core.Models
             return ttlCost;
         }
 
-        public double CalculateBuyAllTotal(int qty)
+        public decimal CalculateBuyAllTotal(int qty)
         {
             var remainingQty = qty;
             foreach (var order in AllowedMarketOrders)

@@ -32,6 +32,7 @@ $(document).ready(function() {
         return false;
     });
 
+    $('.timeago').timeago();
 
     /*
      * ===================================

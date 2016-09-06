@@ -14,7 +14,7 @@ namespace EveMarket.Core.Repositories.Db
     
     public partial class MineralQuote
     {
-        public int Id { get; set; }
+        public System.Guid Id { get; set; }
         public string QuoteLookup { get; set; }
         public string PlayerName { get; set; }
         public Nullable<int> TritaniumQty { get; set; }

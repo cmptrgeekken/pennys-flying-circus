@@ -15,7 +15,7 @@ namespace EveMarket.Web.Controllers
         {
             return RedirectToAction("OreCalculator", "Calculator");
         }
-
+        
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

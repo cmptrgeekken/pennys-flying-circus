@@ -242,6 +242,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0.1\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -304,7 +308,9 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\TaskConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\CalculatorController.cs" />
@@ -455,6 +461,7 @@
     <Content Include="Content\img\webdesign.jpg" />
     <Content Include="Content\js\bootstrap-hover-dropdown.js" />
     <Content Include="Content\js\contact-form.js" />
+    <Content Include="Content\js\jquery.timeago.js" />
     <Content Include="Content\js\min\bootstrap-hover-dropdown.min.js" />
     <Content Include="Content\js\min\contact-form.min.js" />
     <Content Include="Content\js\min\initmap.min.js" />
@@ -756,9 +763,12 @@
     <Content Include="Views\Player\Skills.cshtml" />
     <Content Include="Views\Calculator\OreCalculator.cshtml" />
     <Content Include="Views\Calculator\_OrderListModal.cshtml" />
+    <Content Include="Views\Errors\_NotFound.cshtml" />
+    <None Include="Views\Errors\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Config\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -12,17 +12,20 @@ namespace EveMarket.Core.Repositories.Db
     using System;
     using System.Collections.Generic;
     
-    public partial class MarketOrder
+    public partial class ImportItem
     {
-        public System.Guid Id { get; set; }
-        public long TypeId { get; set; }
-        public long StationId { get; set; }
-        public int Volume { get; set; }
-        public decimal Price { get; set; }
-        public long RegionId { get; set; }
-        public string StationName { get; set; }
-        public System.Guid ImportItemId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ImportItem()
+        {
+            this.MarketOrders = new HashSet<MarketOrder>();
+        }
     
-        public virtual ImportItem ImportItem { get; set; }
+        public long TypeId { get; set; }
+        public long RegionId { get; set; }
+        public Nullable<System.DateTime> LastUpdate { get; set; }
+        public System.Guid Id { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MarketOrder> MarketOrders { get; set; }
     }
 }

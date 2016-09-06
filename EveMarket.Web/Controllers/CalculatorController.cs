@@ -19,7 +19,7 @@ namespace EveMarket.Web.Controllers
 
         public CalculatorController()
         {
-            _itemService = new ItemService(new EveDb(), new EveCentral(), new EveMarketDataEntities());
+            _itemService = new ItemService(new EveDb(), new FlyingCircusEntities());
             _playerService = new PlayerService(new EveDb());
         }
 
@@ -87,6 +87,14 @@ namespace EveMarket.Web.Controllers
             }
 
             return RedirectToAction("OreCalculator", mineralList);
+        }
+
+        [HttpGet]
+        public ActionResult UpdateItemDb()
+        {
+            _itemService.UpdateMarketOrders();
+
+            return Content("Success");
         }
     }
 }

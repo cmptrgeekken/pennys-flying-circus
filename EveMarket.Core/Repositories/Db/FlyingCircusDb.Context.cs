@@ -13,10 +13,10 @@ namespace EveMarket.Core.Repositories.Db
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class EveMarketDataEntities : DbContext
+    public partial class FlyingCircusEntities : DbContext
     {
-        public EveMarketDataEntities()
-            : base("name=EveMarketDataEntities")
+        public FlyingCircusEntities()
+            : base("name=FlyingCircusEntities")
         {
         }
     
@@ -25,7 +25,8 @@ namespace EveMarket.Core.Repositories.Db
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<MarketOrder> MarketOrders { get; set; }
+        public virtual DbSet<ImportItem> ImportItems { get; set; }
         public virtual DbSet<MineralQuote> MineralQuotes { get; set; }
+        public virtual DbSet<MarketOrder> MarketOrders { get; set; }
     }
 }

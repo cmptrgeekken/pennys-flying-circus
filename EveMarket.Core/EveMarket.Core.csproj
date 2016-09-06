@@ -179,26 +179,29 @@
     <Compile Include="Repositories\crpNPCCorporationResearchField.cs" />
     <Compile Include="Repositories\crpNPCCorporationTrade.cs" />
     <Compile Include="Repositories\crpNPCDivision.cs" />
-    <Compile Include="Repositories\Db\MarketDb.Context.cs">
+    <Compile Include="Repositories\Db\FlyingCircusDb.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>MarketDb.Context.tt</DependentUpon>
+      <DependentUpon>FlyingCircusDb.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\Db\MarketDb.cs">
+    <Compile Include="Repositories\Db\FlyingCircusDb.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>MarketDb.tt</DependentUpon>
+      <DependentUpon>FlyingCircusDb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\Db\MarketDb.Designer.cs">
+    <Compile Include="Repositories\Db\FlyingCircusDb.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>MarketDb.edmx</DependentUpon>
+      <DependentUpon>FlyingCircusDb.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Repositories\Db\ImportItem.cs">
+      <DependentUpon>FlyingCircusDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Repositories\Db\MarketOrder.cs">
-      <DependentUpon>MarketDb.tt</DependentUpon>
+      <DependentUpon>FlyingCircusDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Repositories\Db\MineralQuote.cs">
-      <DependentUpon>MarketDb.tt</DependentUpon>
+      <DependentUpon>FlyingCircusDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Repositories\dgmAttributeCategory.cs" />
     <Compile Include="Repositories\dgmAttributeType.cs" />
@@ -270,27 +273,17 @@
     <Compile Include="Services\PlayerService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-    <EntityDeploy Include="Repositories\Db\MarketDb.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>MarketDb.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="Repositories\Db\MarketDb.edmx.diagram">
-      <DependentUpon>MarketDb.edmx</DependentUpon>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Repositories\Db\MarketDb.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>MarketDb.edmx</DependentUpon>
-      <LastGenOutput>MarketDb.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Repositories\Db\MarketDb.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>MarketDb.edmx</DependentUpon>
-      <LastGenOutput>MarketDb.cs</LastGenOutput>
-    </Content>
+    <None Include="packages.config" />
+    <EntityDeploy Include="Repositories\Db\FlyingCircusDb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>FlyingCircusDb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Repositories\Db\FlyingCircusDb.edmx.diagram">
+      <DependentUpon>FlyingCircusDb.edmx</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -306,6 +299,18 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Repositories\Db\FlyingCircusDb.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>FlyingCircusDb.edmx</DependentUpon>
+      <LastGenOutput>FlyingCircusDb.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Repositories\Db\FlyingCircusDb.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>FlyingCircusDb.edmx</DependentUpon>
+      <LastGenOutput>FlyingCircusDb.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
