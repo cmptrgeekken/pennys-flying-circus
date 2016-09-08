@@ -145,7 +145,10 @@
     {
         <div class="row">
             <div class="col-md-12">
-                <h2>Ores to Purchase</h2>
+                <h2>Ores to Purchase
+                    <i><small>(Last Updated: <time class="timeago" datetime="@Model.OrderSummary.Ores.First().Pricing.LastUpdated.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")">
+                        @Model.OrderSummary.Ores.First().Pricing.LastUpdated.Value.ToString("G")
+                    </time>)</small></i></h2>
                 <div class="form-group">
                     <table class="table table-bordered">
                         <tr>
@@ -154,7 +157,6 @@
                             <th class="align-right hidden-xs">Volume</th>
                             <th class="align-right">Total<span class="hidden-xs"> (Buy All)</span></th>
                             <th class="align-right hidden-xs"><abbr title="Values marked green save at least 1% if purchasing individual sell orders.">Total (Optimal)</abbr></th>
-                            <th class="align-right hidden-xs">Last Updated</th>
                         </tr>
                         @foreach (var ore in Model.OrderSummary.Ores)
                         {
@@ -168,11 +170,6 @@
                                     </a>
                                 </td>
                                 <td class="align-right hidden-xs@(ore.TotalPriceBest < ore.TotalPrice * .99m ? " buy-best" : "")">@ore.TotalPriceBest.ToString("#,0.00")</td>
-                                <td class="align-right hidden-xs">
-                                    <time class="timeago" datetime="@ore.Pricing.LastUpdated.Value.ToLocalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")">
-                                        @ore.Pricing.LastUpdated.Value.ToLocalTime().ToString("G")
-                                    </time>
-                                </td>
                             </tr>
                         }
                         <tr>

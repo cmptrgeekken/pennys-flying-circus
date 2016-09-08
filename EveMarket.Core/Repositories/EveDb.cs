@@ -119,12 +119,12 @@ namespace EveMarket.Core.Repositories
                 .HasForeignKey(tm => tm.materialTypeID);
 
             modelBuilder.Entity<staStation>()
-                .HasRequired(s => s.constellation)
+                .HasOptional(s => s.constellation)
                 .WithMany(c => c.stations)
                 .HasForeignKey(s => s.constellationID);
 
             modelBuilder.Entity<mapConstellation>()
-                .HasRequired(c => c.region)
+                .HasOptional(c => c.region)
                 .WithMany(r => r.constellations)
                 .HasForeignKey(c => c.regionID);
 

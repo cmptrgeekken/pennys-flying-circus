@@ -230,12 +230,22 @@ namespace EveMarket.Core.Services
 
         public ItemPricing GetCurrentItemPricing(long typeId, long regionId = 10000002, IEnumerable<long> stationIds = null)
         {
+            var region = _eveDb.mapRegions.Single(r => r.regionID == regionId);
+            var regionConstellations = region.constellations.ToList();
+            var regionStations = regionConstellations.SelectMany(c => c.stations).ToList();
+            var stationDict = regionStations.ToDictionary(s => s.stationID, s => s.stationName);
+
             var sellOrders = _liteDb.GetCollection<MarketOrderList>("sellOrders");
 
             var marketOrders = sellOrders.FindOne(o => o.TypeId == typeId && o.RegionId == regionId);
 
             if (marketOrders != null)
             {
+                foreach (var marketOrder in marketOrders.Orders)
+                {
+                    marketOrder.StationName = stationDict[marketOrder.StationId];
+                }
+
                 var itemPricing = new ItemPricing
                 {
                     RegionId = regionId,
@@ -254,12 +264,6 @@ namespace EveMarket.Core.Services
         public void RefreshMarketOrders(long regionId)
         {
             var crestUrl = $"https://crest-tq.eveonline.com/market/{regionId}/orders/all/?page={{0}}";
-            
-            var region = _eveDb.mapRegions.Single(r => r.regionID == regionId);
-
-            //var regionStations = _eveDb.staStations
-            //    .Where(s => s.constellation.regionID == regionId)
-            //    .ToDictionary(s => s.stationID, s => s.stationName);
 
             var marketOrders = new List<CrestMarketOrder>();
             var currentPage = 1;

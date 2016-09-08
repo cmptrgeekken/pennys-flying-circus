@@ -12,7 +12,8 @@ namespace EveMarket.Core.Repositories
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long stationID { get; set; }
 
-        public long? security { get; set; }
+        [Column(TypeName = "real")]
+        public double? security { get; set; }
 
         [Column(TypeName = "real")]
         public double? dockingCostPerVolume { get; set; }

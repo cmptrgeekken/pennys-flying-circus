@@ -1,54 +1,53 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Caching;
-using EveMarket.Core.Repositories;
-using EveMarket.Core.Services;
 using EveMarket.Core.Services.Interfaces;
 
 namespace EveMarket.Web
 {
     public class TaskConfig
     {
-        private CacheItemRemovedCallback OnCacheRemove;
+        private readonly CacheItemRemovedCallback _onCacheRemove;
         private readonly IItemService _itemService;
         
 
         public TaskConfig(IItemService itemService)
         {
             _itemService = itemService;
+            _onCacheRemove = CachItemRemoved;
         }
 
         public void RegisterTasks()
         {
-            AddTask("UpdateItems", 300);
+            AddTask("RefreshItemDatabase", 300);
 
-            UpdateItems();
+            RefreshItemDatabase();
         }
 
         private void AddTask(string name, int seconds)
         {
-            OnCacheRemove = CachItemRemoved;
             HttpRuntime.Cache.Insert(name, seconds, null, DateTime.Now.AddSeconds(seconds), Cache.NoSlidingExpiration,
-                CacheItemPriority.NotRemovable, OnCacheRemove);
+                CacheItemPriority.NotRemovable, _onCacheRemove);
         }
 
         private void CachItemRemoved(string key, object value, CacheItemRemovedReason reason)
         {
             switch (key)
             {
-                case "UpdateItems":
-                    UpdateItems();
+                case "RefreshItemDatabase":
+                    RefreshItemDatabase();
                     break;
             }
 
             AddTask(key, Convert.ToInt32(value));
         }
 
-        private void UpdateItems()
+        private void RefreshItemDatabase()
         {
-            _itemService.RefreshMarketOrders(10000002);
+            var thread = new Thread(() => _itemService.RefreshMarketOrders(10000002));
+
+            thread.Start();
         }
     }
 }
