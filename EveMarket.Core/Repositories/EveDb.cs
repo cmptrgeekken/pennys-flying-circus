@@ -118,6 +118,16 @@ namespace EveMarket.Core.Repositories
                 .WithMany(t => t.materialTypes)
                 .HasForeignKey(tm => tm.materialTypeID);
 
+            modelBuilder.Entity<staStation>()
+                .HasRequired(s => s.constellation)
+                .WithMany(c => c.stations)
+                .HasForeignKey(s => s.constellationID);
+
+            modelBuilder.Entity<mapConstellation>()
+                .HasRequired(c => c.region)
+                .WithMany(r => r.constellations)
+                .HasForeignKey(c => c.regionID);
+
             modelBuilder.Entity<agtAgentType>()
                 .Property(e => e.agentType)
                 .IsUnicode(false);

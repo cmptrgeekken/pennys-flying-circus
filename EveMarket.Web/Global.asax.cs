@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Autofac;
 
 namespace EveMarket.Web
 {
@@ -13,7 +14,10 @@ namespace EveMarket.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            TaskConfig.RegisterTasks();
+
+            var container = DependencyConfig.RegisterDependencies();
+            var taskConfig = container.Resolve<TaskConfig>();
+            taskConfig.RegisterTasks();
         }
     }
 }

@@ -101,6 +101,10 @@
       <HintPath>..\packages\eZet.EveLib.ZKillboard.3.0.4\lib\net45\EveLib.ZKillboard.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="LiteDB, Version=2.0.2.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.2.0.2\lib\net35\LiteDB.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -151,11 +155,11 @@
     <Compile Include="Enums\ReprocessingType.cs" />
     <Compile Include="Models\AdjustedMarketOrder.cs" />
     <Compile Include="Models\BaseMarketItem.cs" />
-    <Compile Include="Models\CrestApi\ItemMarketOrder.cs" />
-    <Compile Include="Models\CrestApi\ItemMarketOrders.cs" />
+    <Compile Include="Models\CrestApi\CrestMarketOrder.cs" />
+    <Compile Include="Models\CrestApi\CrestMarketOrderList.cs" />
+    <Compile Include="Models\FlyingCircus\MarketOrderList.cs" />
+    <Compile Include="Models\FlyingCircus\RegionMarketOrders.cs" />
     <Compile Include="Models\ItemPricing.cs" />
-    <Compile Include="Models\CrestApi\MarketOrderLocation.cs" />
-    <Compile Include="Models\CrestApi\MarketOrderType.cs" />
     <Compile Include="Models\Mineral.cs" />
     <Compile Include="Models\MineralList.cs" />
     <Compile Include="Models\MineralOre.cs" />
@@ -179,30 +183,6 @@
     <Compile Include="Repositories\crpNPCCorporationResearchField.cs" />
     <Compile Include="Repositories\crpNPCCorporationTrade.cs" />
     <Compile Include="Repositories\crpNPCDivision.cs" />
-    <Compile Include="Repositories\Db\FlyingCircusDb.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FlyingCircusDb.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Repositories\Db\FlyingCircusDb.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FlyingCircusDb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Repositories\Db\FlyingCircusDb.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FlyingCircusDb.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Repositories\Db\ImportItem.cs">
-      <DependentUpon>FlyingCircusDb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Repositories\Db\MarketOrder.cs">
-      <DependentUpon>FlyingCircusDb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Repositories\Db\MineralQuote.cs">
-      <DependentUpon>FlyingCircusDb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Repositories\dgmAttributeCategory.cs" />
     <Compile Include="Repositories\dgmAttributeType.cs" />
     <Compile Include="Repositories\dgmEffect.cs" />
@@ -213,6 +193,9 @@
     <Compile Include="Repositories\eveGraphic.cs" />
     <Compile Include="Repositories\eveIcon.cs" />
     <Compile Include="Repositories\eveUnit.cs" />
+    <Compile Include="Models\FlyingCircus\ImportItem.cs" />
+    <Compile Include="Models\FlyingCircus\MarketOrder.cs" />
+    <Compile Include="Models\FlyingCircus\MineralQuote.cs" />
     <Compile Include="Repositories\industryActivity.cs" />
     <Compile Include="Repositories\industryBlueprint.cs" />
     <Compile Include="Repositories\invCategory.cs" />
@@ -269,6 +252,8 @@
     <Compile Include="Repositories\trnTranslationLanguage.cs" />
     <Compile Include="Repositories\warCombatZone.cs" />
     <Compile Include="Repositories\warCombatZoneSystem.cs" />
+    <Compile Include="Services\Interfaces\IItemService.cs" />
+    <Compile Include="Services\Interfaces\IPlayerService.cs" />
     <Compile Include="Services\ItemService.cs" />
     <Compile Include="Services\PlayerService.cs" />
   </ItemGroup>
@@ -277,13 +262,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <EntityDeploy Include="Repositories\Db\FlyingCircusDb.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>FlyingCircusDb.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="Repositories\Db\FlyingCircusDb.edmx.diagram">
-      <DependentUpon>FlyingCircusDb.edmx</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -299,18 +277,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Repositories\Db\FlyingCircusDb.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>FlyingCircusDb.edmx</DependentUpon>
-      <LastGenOutput>FlyingCircusDb.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Repositories\Db\FlyingCircusDb.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>FlyingCircusDb.edmx</DependentUpon>
-      <LastGenOutput>FlyingCircusDb.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

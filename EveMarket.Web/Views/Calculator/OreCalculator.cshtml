@@ -169,7 +169,7 @@
                                 </td>
                                 <td class="align-right hidden-xs@(ore.TotalPriceBest < ore.TotalPrice * .99m ? " buy-best" : "")">@ore.TotalPriceBest.ToString("#,0.00")</td>
                                 <td class="align-right hidden-xs">
-                                    <time class="timeago" datetime="@ore.Pricing.LastUpdated.Value.ToString("yyyy-MM-ddTHH:mm:ssZ")">
+                                    <time class="timeago" datetime="@ore.Pricing.LastUpdated.Value.ToLocalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")">
                                         @ore.Pricing.LastUpdated.Value.ToLocalTime().ToString("G")
                                     </time>
                                 </td>

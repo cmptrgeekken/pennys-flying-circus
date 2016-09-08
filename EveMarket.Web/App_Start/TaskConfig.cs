@@ -4,30 +4,37 @@ using System.Linq;
 using System.Web;
 using System.Web.Caching;
 using EveMarket.Core.Repositories;
-using EveMarket.Core.Repositories.Db;
 using EveMarket.Core.Services;
+using EveMarket.Core.Services.Interfaces;
 
 namespace EveMarket.Web
 {
     public class TaskConfig
     {
-        private static CacheItemRemovedCallback OnCacheRemove;
+        private CacheItemRemovedCallback OnCacheRemove;
+        private readonly IItemService _itemService;
+        
 
-        public static void RegisterTasks()
+        public TaskConfig(IItemService itemService)
+        {
+            _itemService = itemService;
+        }
+
+        public void RegisterTasks()
         {
             AddTask("UpdateItems", 300);
 
             UpdateItems();
         }
 
-        private static void AddTask(string name, int seconds)
+        private void AddTask(string name, int seconds)
         {
             OnCacheRemove = CachItemRemoved;
             HttpRuntime.Cache.Insert(name, seconds, null, DateTime.Now.AddSeconds(seconds), Cache.NoSlidingExpiration,
                 CacheItemPriority.NotRemovable, OnCacheRemove);
         }
 
-        private static void CachItemRemoved(string key, object value, CacheItemRemovedReason reason)
+        private void CachItemRemoved(string key, object value, CacheItemRemovedReason reason)
         {
             switch (key)
             {
@@ -39,11 +46,9 @@ namespace EveMarket.Web
             AddTask(key, Convert.ToInt32(value));
         }
 
-        private static void UpdateItems()
+        private void UpdateItems()
         {
-            var itemService = new ItemService(new EveDb(), new FlyingCircusEntities());
-
-            itemService.UpdateMarketOrders();
+            _itemService.RefreshMarketOrders(10000002);
         }
     }
 }

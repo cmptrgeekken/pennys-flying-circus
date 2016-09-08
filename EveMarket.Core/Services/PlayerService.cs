@@ -1,16 +1,11 @@
 ﻿using EveMarket.Core.Models;
 using EveMarket.Core.Repositories;
+using EveMarket.Core.Services.Interfaces;
 
 namespace EveMarket.Core.Services
 {
-    public class PlayerService
+    public class PlayerService : IPlayerService
     {
-        private readonly EveDb _eveDb;
-
-        public PlayerService(EveDb eveDb)
-        {
-            _eveDb = eveDb;
-        }
 
         public ReprocessingSkills GetReprocessingSkills()
         {

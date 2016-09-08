@@ -1,26 +1,22 @@
 ﻿using System;
 using EveMarket.Core.Models;
-using EveMarket.Core.Repositories;
-using EveMarket.Core.Services;
 using EveMarket.Web.Models;
-using eZet.EveLib.EveCentralModule;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
-using EveMarket.Core.Repositories.Db;
+using EveMarket.Core.Services.Interfaces;
 
 namespace EveMarket.Web.Controllers
 {
     public class CalculatorController : Controller
     {
-        private readonly ItemService _itemService;
-        private readonly PlayerService _playerService;
+        private readonly IItemService _itemService;
+        private readonly IPlayerService _playerService;
 
-        public CalculatorController()
+        public CalculatorController(IPlayerService playerService, IItemService itemService)
         {
-            _itemService = new ItemService(new EveDb(), new FlyingCircusEntities());
-            _playerService = new PlayerService(new EveDb());
+            _playerService = playerService;
+            _itemService = itemService;
         }
 
 
@@ -87,14 +83,6 @@ namespace EveMarket.Web.Controllers
             }
 
             return RedirectToAction("OreCalculator", mineralList);
-        }
-
-        [HttpGet]
-        public ActionResult UpdateItemDb()
-        {
-            _itemService.UpdateMarketOrders();
-
-            return Content("Success");
         }
     }
 }

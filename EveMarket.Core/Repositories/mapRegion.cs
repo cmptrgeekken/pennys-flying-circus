@@ -46,5 +46,6 @@ namespace EveMarket.Core.Repositories
 
         [Column(TypeName = "real")]
         public double? radius { get; set; }
+        public virtual ICollection<mapConstellation> constellations { get; set; }
     }
 }

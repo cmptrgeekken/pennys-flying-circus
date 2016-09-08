@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using EveMarket.Core.Repositories.Db;
+using EveMarket.Core.Models.FlyingCircus;
 
 namespace EveMarket.Core.Models
 {

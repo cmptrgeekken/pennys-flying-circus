@@ -53,5 +53,7 @@ namespace EveMarket.Core.Repositories
         public double? reprocessingStationsTake { get; set; }
 
         public long? reprocessingHangarFlag { get; set; }
+
+        public virtual mapConstellation constellation { get; set; }
     }
 }

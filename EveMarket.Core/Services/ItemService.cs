@@ -7,15 +7,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using EveMarket.Core.Repositories.Db;
+using EveMarket.Core.Models.FlyingCircus;
+using EveMarket.Core.Services.Interfaces;
+using LiteDB;
 
 namespace EveMarket.Core.Services
 {
-    public class ItemService
+    public class ItemService : IItemService
     {
 
         private readonly EveDb _eveDb;
-        private readonly FlyingCircusEntities _marketEntities;
+        private readonly LiteDatabase _liteDb;
 
         private static readonly Dictionary<MineralType, ReprocessingType> MineralPrimaryOreMapping 
             = new Dictionary<MineralType, ReprocessingType>
@@ -43,10 +45,10 @@ namespace EveMarket.Core.Services
                 {MineralType.Morphite, 1},
             };
 
-        public ItemService(EveDb eveDb, FlyingCircusEntities marketEntities)
+        public ItemService(EveDb eveDb, LiteDatabase liteDb)
         {
             _eveDb = eveDb;
-            _marketEntities = marketEntities;
+            _liteDb = liteDb;
         }
 
         public List<OreGroup> GetOreGroups(ReprocessingSkills reprocessingSkills)
@@ -177,49 +179,7 @@ namespace EveMarket.Core.Services
 
             return oreGroups.SelectMany(og => og.Ores.Where(o => o.Qty > 0)).ToList();
         }
-
-        public MineralQuote SaveQuote(MineralList mineralList, decimal subtotal, decimal shipping, decimal total)
-        {
-            var mineralQuote = new MineralQuote
-            {
-                //QuoteLookup = GenerateQuoteLookup(),
-                TritaniumQty = (int)mineralList.Tritanium,
-                PyeriteQty = (int)mineralList.Pyerite,
-                MegacyteQty = (int)mineralList.Megacyte,
-                NocxiumQty = (int)mineralList.Nocxium,
-                IsogenQty = (int)mineralList.Isogen,
-                MexallonQty = (int)mineralList.Mexallon,
-                ZydrineQty = (int)mineralList.Zydrine,
-                MorphiteQty = (int)mineralList.Morphite,
-                Subtotal = subtotal,
-                Shipping = shipping,
-                Total = total,
-                SubmissionDate = DateTime.Now,
-            };
-
-            _marketEntities.MineralQuotes.Add(mineralQuote);
-            _marketEntities.SaveChanges();
-
-            return mineralQuote;
-        }
-
-        public string GenerateQuoteLookup()
-        {
-            var values = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".Split(new[] {""}, StringSplitOptions.RemoveEmptyEntries);
-            const int quoteLookupLength = 5;
-
-            var rand = new Random();
-            while(true)
-            {
-                var quoteLookup = new string(Enumerable.Repeat(values, quoteLookupLength).SelectMany(s => s[rand.Next(0,s.Length)]).ToArray());
-
-                if (!_marketEntities.MineralQuotes.Any(q => q.QuoteLookup == quoteLookup))
-                {
-                    return quoteLookup;
-                }
-            }
-        }
-
+        
         public OrderSummary GetOrderSummary(IEnumerable<OreMinerals> ores, List<Mineral> minerals, MineralList mineralList)
         {
             var oreList = ores.ToList();
@@ -270,28 +230,17 @@ namespace EveMarket.Core.Services
 
         public ItemPricing GetCurrentItemPricing(long typeId, long regionId = 10000002, IEnumerable<long> stationIds = null)
         {
-            var itemEntry = _marketEntities.ImportItems.SingleOrDefault(i => i.RegionId == regionId && i.TypeId == typeId);
-            if (itemEntry == null)
-            {
-                itemEntry = new ImportItem
-                {
-                    Id = Guid.NewGuid(),
-                    TypeId = typeId,
-                    RegionId = regionId,
-                };
+            var sellOrders = _liteDb.GetCollection<MarketOrderList>("sellOrders");
 
-                _marketEntities.ImportItems.Add(itemEntry);
-                _marketEntities.SaveChanges();
-            }
+            var marketOrders = sellOrders.FindOne(o => o.TypeId == typeId && o.RegionId == regionId);
 
-            var marketOrders = GetMarketOrders(itemEntry, false);
             if (marketOrders != null)
             {
                 var itemPricing = new ItemPricing
                 {
                     RegionId = regionId,
-                    LastUpdated = itemEntry.LastUpdate,
-                    MarketOrders = marketOrders.OrderBy(o => o.Price),
+                    LastUpdated = marketOrders.LastUpdated,
+                    MarketOrders = marketOrders.Orders,
                     // TODO Make station ID configurable
                     AllowedStationIds = new List<long> { 60003760 },
                 };
@@ -302,65 +251,62 @@ namespace EveMarket.Core.Services
             return null;
         }
 
-        public void UpdateMarketOrders()
+        public void RefreshMarketOrders(long regionId)
         {
-            var expiredCheck = DateTime.UtcNow.AddMinutes(-5);
-            var importItems = _marketEntities.ImportItems
-                .Where(i => i.LastUpdate < expiredCheck)
-                .ToList();
+            var crestUrl = $"https://crest-tq.eveonline.com/market/{regionId}/orders/all/?page={{0}}";
+            
+            var region = _eveDb.mapRegions.Single(r => r.regionID == regionId);
 
-            foreach(var importItem in importItems)
-            {
-               GetMarketOrders(importItem, true);
-            }
-        }
+            //var regionStations = _eveDb.staStations
+            //    .Where(s => s.constellation.regionID == regionId)
+            //    .ToDictionary(s => s.stationID, s => s.stationName);
 
-        public IEnumerable<MarketOrder> GetMarketOrders(ImportItem importItem, bool updateEntries)
-        {
-            IEnumerable<MarketOrder> marketOrders = _marketEntities.MarketOrders
-                .Where(o => o.TypeId == importItem.TypeId && o.RegionId == importItem.RegionId);
-
-            if ((!updateEntries && marketOrders.Any()) || importItem.LastUpdate >= DateTime.UtcNow.AddMinutes(-5))
-            {
-                return marketOrders.ToList();
-            }
-
-            var crestUrl = $"https://crest-tq.eveonline.com/market/{importItem.RegionId}/orders/sell/?type=https://crest-tq.eveonline.com/inventory/types/{importItem.TypeId}/";
-
-            ItemMarketOrders result;
-
+            var marketOrders = new List<CrestMarketOrder>();
+            var currentPage = 1;
             using (var client = new WebClient())
             {
-                var content = client.DownloadString(crestUrl);
-                result = JsonConvert.DeserializeObject<ItemMarketOrders>(content);
+                client.Proxy = null;
+
+                CrestMarketOrderList result;
+                do
+                {
+                    var content = client.DownloadString(string.Format(crestUrl, currentPage));
+                    result = JsonConvert.DeserializeObject<CrestMarketOrderList>(content);
+
+                    marketOrders.AddRange(result.Items);
+                } while (currentPage++ < result.PageCount);
             }
 
-            if (result != null)
-            {
-                marketOrders = result.Items.Select(i => new MarketOrder
+            var sellOrders = marketOrders.Where(o => !o.Buy)
+                .OrderBy(o => o.Price)
+                .GroupBy(o => o.Type)
+                .Select(o => new MarketOrderList
                 {
-                    Id = Guid.NewGuid(),
-                    ImportItemId = importItem.Id,
-                    TypeId = i.Type.Id,
-                    Price = (decimal)i.Price,
-                    Volume = i.Volume,
-                    StationId = i.Location.Id,
-                    StationName = i.Location.Name,
-                    RegionId = importItem.RegionId,
+                    TypeId = o.Key,
+                    RegionId = regionId,
+                    LastUpdated = DateTime.UtcNow,
+                    Orders = o.Select(i => new MarketOrder
+                    {
+                        Price = i.Price,
+                        StationId = i.StationId,
+                        //StationName = regionStations[i.StationId],
+                        TypeId = i.Type,
+                        Volume = i.Volume,
+                    })
                 });
 
-                _marketEntities.MarketOrders.RemoveRange(
-                    _marketEntities.MarketOrders.Where(o => o.TypeId == importItem.TypeId));
-                _marketEntities.MarketOrders.AddRange(marketOrders);
+            using (var trans = _liteDb.BeginTrans())
+            {
+                var orders = _liteDb.GetCollection<MarketOrderList>("sellOrders");
 
-                importItem.LastUpdate = DateTime.UtcNow;
+                orders.Delete(i => i.RegionId == regionId);
+                orders.Insert(sellOrders);
 
-                _marketEntities.SaveChanges();
+                orders.EnsureIndex(i => i.RegionId);
+                orders.EnsureIndex(i => i.TypeId);
 
-                return marketOrders.ToList();
+                trans.Commit();
             }
-
-            return null;
         }
     }
 }

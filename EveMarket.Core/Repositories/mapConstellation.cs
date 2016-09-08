@@ -48,5 +48,8 @@ namespace EveMarket.Core.Repositories
 
         [Column(TypeName = "real")]
         public double? radius { get; set; }
+
+        public virtual mapRegion region { get; set; }
+        public virtual ICollection<staStation> stations { get; set; }
     }
 }

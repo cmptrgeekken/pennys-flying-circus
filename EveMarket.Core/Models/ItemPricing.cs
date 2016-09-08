@@ -3,7 +3,7 @@ using eZet.EveLib.EveMarketDataModule.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EveMarket.Core.Repositories.Db;
+using EveMarket.Core.Models.FlyingCircus;
 
 namespace EveMarket.Core.Models
 {
