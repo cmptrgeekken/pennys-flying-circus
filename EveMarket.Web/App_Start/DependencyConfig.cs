@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Web.Mvc;
 using Autofac;
+using Autofac.Core.Activators.Reflection;
 using Autofac.Integration.Mvc;
+using eZet.EveLib.EveAuthModule;
+using eZet.EveLib.EveCrestModule;
 using EveMarket.Core.Repositories;
 using EveMarket.Core.Services;
 using EveMarket.Core.Services.Interfaces;
@@ -45,8 +48,18 @@ namespace EveMarket.Web
             builder.RegisterType<PlayerService>()
                 .As<IPlayerService>();
 
+            builder.RegisterType<EveAuth>()
+                .AsSelf();
+
+            builder.RegisterType<EveCrest>()
+                .AsSelf()
+                .InstancePerRequest()
+                .UsingConstructor(typeof(string),typeof(string));
+
             builder.RegisterType<TaskConfig>()
                 .AsSelf();
         }
     }
+
+    
 }

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using EveMarket.Core.Models;
 using EveMarket.Web.Models;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using EveMarket.Core.Services;
 using EveMarket.Core.Services.Interfaces;
 
 namespace EveMarket.Web.Controllers
@@ -12,11 +14,15 @@ namespace EveMarket.Web.Controllers
     {
         private readonly IItemService _itemService;
         private readonly IPlayerService _playerService;
+        private readonly IEveService _eveService;
 
         public CalculatorController(IPlayerService playerService, IItemService itemService)
         {
             _playerService = playerService;
             _itemService = itemService;
+
+
+            _eveService = new EveService(Session["RefreshToken"] as string);
         }
 
 
@@ -26,8 +32,17 @@ namespace EveMarket.Web.Controllers
             return View();
         }
 
+        //public ActionResult FittingsSelector()
+        //{
+        //    //var fittings = _eveService.GetFittings();
+
+
+        //    //return View(viewModel);
+        //}
+
+
         [HttpGet]
-        public ActionResult OreCalculator(MineralList desiredMinerals)
+        public ActionResult OreCalculator(MineralList desiredMinerals, IEnumerable<ItemLookupViewModel> itemList)
         {
             var skills = _playerService.GetReprocessingSkills();
 
@@ -39,50 +54,118 @@ namespace EveMarket.Web.Controllers
 
             if (desiredMinerals.TotalVolume > 0)
             {
-                viewModel.OrderSummary = _itemService.GetCompressedOres(skills, desiredMinerals);
+                viewModel.OreOrderSummary = _itemService.GetCompressedOres(skills, desiredMinerals);
             }
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult ParseItems(string textInput)
+        public ActionResult ParseItems(string textInput, bool useCompressedOres = false, bool buildShips = false, int multiplier = 1)
         {
-
             var inputTests = new []
             {
+                new Regex(@"^\[(?<itemName>[^,]+),"),
+                new Regex(@"^(?<itemName>[^\t]+)\t(?<itemQty>[\d,]+)$"),
+                new Regex(@"^(?<itemName>.+?)(\sx(?<itemQty>[\d,]+))?$"),
                 new Regex(@"^(?<itemQty>[\d,]+)x?\s+(?<itemName>[^\t]+)"),
-                new Regex(@"^(?<itemName>[^\t]+)\tx?(?<itemQty>[\d,]+x?)"),
                 new Regex(@"^(?<itemName>[^\d\t]+)"),
             };
 
             var lines = textInput.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.RemoveEmptyEntries);
 
             var mineralList = new MineralList();
+            var itemList = new List<ItemLookup>();
+            var invalidLines = new List<string>();
             var mineralNames = mineralList.GetMineralNames().ToList();
 
             foreach (var line in lines)
             {
+                var matchFound = false;
                 foreach (var inputTest in inputTests)
                 {
-                    var inputMatch = inputTest.Match(line);
+                    var inputMatch = inputTest.Match(line.Trim());
                     if (inputMatch.Success)
                     {
                         var itemQty = inputMatch.Groups["itemQty"];
                         var itemName = inputMatch.Groups["itemName"].Value;
+                        var qty = multiplier * (itemQty.Success ? int.Parse(itemQty.Value.Replace(",", "")) : 1);
 
-                        if (mineralNames.Contains(itemName))
+                        if (useCompressedOres && mineralNames.Contains(itemName))
                         {
-                            var qty = itemQty.Success ? int.Parse(itemQty.Value.Replace(",","")) : 1;
-
                             mineralList[itemName] += qty;
+                            matchFound = true;
+                        }
+                        else
+                        {
+                            var item = _itemService.GetItem(itemName);
+                            
+                            if (item != null)
+                            {
+                                var itemEntry = itemList.FirstOrDefault(il => il.TypeId == item.typeID);
+                                if (itemEntry == null)
+                                {
+                                    itemList.Add(new ItemLookup
+                                    {
+                                        TypeId = item.typeID,
+                                        Qty = qty
+                                    });
+                                }
+                                else
+                                {
+                                    itemEntry.Qty += qty;
+                                }
+
+                                matchFound = true;
+                            }
                         }
                         break;
                     }
                 }
+
+                if (!matchFound)
+                {
+                    invalidLines.Add(line);
+                }
             }
 
-            return RedirectToAction("OreCalculator", mineralList);
+            var skills = _playerService.GetReprocessingSkills();
+
+            var viewModel = new OreListModel
+            {
+                Skills = skills,
+                DesiredMinerals = mineralList,
+                TextInput = textInput,
+                InvalidLines = invalidLines,
+                UseCompressedOres = useCompressedOres,
+                Multiplier = multiplier,
+                BuildShips = buildShips,
+            };
+
+            if (mineralList.TotalVolume > 0)
+            {
+                var compressedOres = _itemService.GetCompressedOres(skills, mineralList);
+                foreach (var ore in compressedOres.MarketItems)
+                {
+                    itemList.Add(new ItemLookup
+                    {
+                        TypeId = ore.Id,
+                        Qty = (int)ore.Qty,
+                    });
+                }
+            }
+
+            if (itemList.Any())
+            {
+
+                viewModel.ItemOrderSummary = _itemService.GetItemPricing(itemList);
+                
+                
+            }
+            viewModel.TextInput = textInput;
+            viewModel.InvalidLines = invalidLines;
+
+            return View("OreCalculator", viewModel);
         }
     }
 }

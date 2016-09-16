@@ -3,9 +3,13 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using eZet.EveLib.EveAuthModule;
+using eZet.EveLib.EveCrestModule;
+using EveMarket.Core.Services.Interfaces;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -17,11 +21,13 @@ namespace EveMarket.Web.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly IEveService _eveService;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        public AccountController()
+        public AccountController(IEveService eveService)
         {
+            _eveService = eveService;
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -51,6 +57,24 @@ namespace EveMarket.Web.Controllers
             private set
             {
                 _userManager = value;
+            }
+        }
+
+        [AllowAnonymous]
+        public async Task<ActionResult> CrestLogin(string state, string code)
+        {
+            switch (state)
+            {
+                case "crest-login":
+                    var authResponse = await _eveService.GetAuthResponse(code);
+
+                    Session["RefreshToken"] = authResponse.RefreshToken;
+
+                    return RedirectToAction("Index", "Home");
+                default:
+                    var redirectUrl = _eveService.GetAuthLink();
+
+                    return Redirect(redirectUrl);
             }
         }
 

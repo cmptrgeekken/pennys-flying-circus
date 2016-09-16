@@ -17,82 +17,45 @@
     <div class="row">
 
         <div class="col-md-4">
-            <form class="form-horizontal" method="GET">
-                <h2><a href="#" data-toggle="modal" data-target="#modal-clipboardImport" class="fa fa-clipboard" title="Import from Clipboard"></a> Desired Minerals</h2>
+            <h2><a data-toggle="collapse" href="#formEntry" aria-expanded="False"><i class="fa fa-chevron-right"></i>Desired Items</a></h2>
+            <form id="formEntry" class="collapse form-horizontal@(Model.ItemOrderSummary == null ? " in" : null)" method="post" action="@Url.Action("ParseItems", "Calculator")">
+                @if (Model.InvalidLines != null && Model.InvalidLines.Any())
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">The following lines could not be parsed:</h4>
+                        <ul>
+                            @foreach (var invalidLine in Model.InvalidLines)
+                            {
+                                <li>@invalidLine</li>
+                            }
+                        </ul>
+                    </div>
+                }
+                <textarea name="TextInput" rows="15" style="width: 100%;" placeholder="Paste desired items here (e.g., 1000 Tritanium)">@Model.TextInput</textarea>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">Tritanium</label>
-                    <div class="col-sm-6">
-                        <div class="control">
-                            @Html.TextBoxFor(m => m.DesiredMinerals.Tritanium, new { @class = "form-control" })
-                        </div>
+                    <label class="col-sm-5 col-form-label" for="multiplier"># of Copies:</label>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="number" name="multiplier" value="@Model.Multiplier"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">Pyerite</label>
-                    <div class="col-sm-6">
-                        <div class="control">
-                            @Html.TextBoxFor(m => m.DesiredMinerals.Pyerite, new { @class = "form-control" })
-                        </div>
+                    <label class="col-sm-5 col-form-label" for="useCompressedOres">Compress Mineral Imports:</label>
+                    <div class="col-sm-1">
+                        <input type="checkbox" checked="@(Model.UseCompressedOres ? "true" : null)" name="useCompressedOres" value="true"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">Mexallon</label>
-                    <div class="col-sm-6">
-                        <div class="control">
-                            @Html.TextBoxFor(m => m.DesiredMinerals.Mexallon, new { @class = "form-control" })
-                        </div>
+                    <label class="col-sm-5 col-form-label" for="buildShips">Build Ships:</label>
+                    <div class="col-sm-1">
+                        <input type="checkbox" name="buildShips" checked="@(Model.BuildShips ? "checked" : null)" value="true"/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Isogen</label>
-                    <div class="col-sm-6">
-                        <div class="control">
-                            @Html.TextBoxFor(m => m.DesiredMinerals.Isogen, new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Nocxium</label>
-                    <div class="col-sm-6">
-                        <div class="control">
-                            @Html.TextBoxFor(m => m.DesiredMinerals.Nocxium, new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Zydrine</label>
-                    <div class="col-sm-6">
-                        <div class="control">
-                            @Html.TextBoxFor(m => m.DesiredMinerals.Zydrine, new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Megacyte</label>
-                    <div class="col-sm-6">
-                        <div class="control">
-                            @Html.TextBoxFor(m => m.DesiredMinerals.Megacyte, new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Morphite</label>
-                    <div class="col-sm-6">
-                        <div class="control">
-                            @Html.TextBoxFor(m => m.DesiredMinerals.Morphite, new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-9">
-                        <button type="submit" class="btn btn-primary">
-                            Submit
-                        </button>
-                    </div>
-                </div>
+                <button type="submit" class="btn btn-primary">
+                    Submit
+                </button>
             </form>
         </div>
-        @if (Model.OrderSummary != null)
+        @if (Model.OreOrderSummary?.MineralQuote != null)
         {
             <div class="col-md-6">
                 <h2>Mineral Quote</h2>
@@ -102,10 +65,10 @@
                             <th>Mineral</th>
                             <th class="align-right">Quantity</th>
                             <th class="align-right hidden-xs">Jita Sell</th>
-                            <th class="align-right">Value (@((Model.OrderSummary.MineralValueRatio - 1).ToString("+0.00%;-0.00%")))</th>
+                            <th class="align-right">Value (@((Model.OreOrderSummary.MineralValueRatio.Value - 1).ToString("+0.00%;-0.00%")))</th>
                         </tr>
 
-                        @foreach (var mineral in Model.OrderSummary.Minerals)
+                        @foreach (var mineral in Model.OreOrderSummary.Minerals)
                         {
                             if (mineral.Qty == 0)
                             {
@@ -122,109 +85,51 @@
                             <td></td>
                             <td class="hidden-xs"></td>
                             <th class="align-right">Subtotal</th>
-                            <th class="align-right" colspan="2">@Model.OrderSummary.PurchaseCost.ToString("#,00.00")</th>
+                            <th class="align-right" colspan="2">@Model.OreOrderSummary.PurchaseCost.ToString("#,00.00")</th>
                         </tr>
                         <tr>
                             <td></td>
                             <td class="hidden-xs"></td>
                             <th class="align-right">Shipping</th>
-                            <th class="align-right" colspan="2">@Model.OrderSummary.SourceStagingShippingCost.ToString("#,00.00")</th>
+                            <th class="align-right" colspan="2">@Model.OreOrderSummary.SourceStagingShippingCost.ToString("#,00.00")</th>
                         </tr>
                         <tr>
                             <td></td>
                             <td class="hidden-xs"></td>
                             <th class="align-right">Total</th>
-                            <th class="align-right" colspan="2">@Model.OrderSummary.PredictedSell.ToString("#,00.00")</th>
+                            <th class="align-right" colspan="2">@Model.OreOrderSummary.PredictedSell.ToString("#,00.00")</th>
                         </tr>
                     </table>
                 </div>
             </div>
         }
     </div>
-    @if (Model.OrderSummary != null)
+    @if (Model.OreOrderSummary != null)
     {
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Ores to Purchase
-                    <i><small>(Last Updated: <time class="timeago" datetime="@Model.OrderSummary.Ores.First().Pricing.LastUpdated.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")">
-                        @Model.OrderSummary.Ores.First().Pricing.LastUpdated.Value.ToString("G")
-                    </time>)</small></i></h2>
-                <div class="form-group">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th>Ore</th>
-                            <th class="align-right">Qty</th>
-                            <th class="align-right hidden-xs">Volume</th>
-                            <th class="align-right">Total<span class="hidden-xs"> (Buy All)</span></th>
-                            <th class="align-right hidden-xs"><abbr title="Values marked green save at least 1% if purchasing individual sell orders.">Total (Optimal)</abbr></th>
-                        </tr>
-                        @foreach (var ore in Model.OrderSummary.Ores)
-                        {
-                            <tr>
-                                <th>@ore.Name</th>
-                                <td class="align-right">@(Math.Ceiling(ore.Qty).ToString("#,0"))</td>
-                                <td class="align-right hidden-xs">@((ore.Volume * ore.Qty).ToString("#,0.00")) m<sup>3</sup></td>
-                                <td class="align-right">
-                                    <a href="#" data-toggle="modal" data-target="#modal-@ore.Id">
-                                        @ore.TotalPrice.ToString("#,0.00")
-                                    </a>
-                                </td>
-                                <td class="align-right hidden-xs@(ore.TotalPriceBest < ore.TotalPrice * .99m ? " buy-best" : "")">@ore.TotalPriceBest.ToString("#,0.00")</td>
-                            </tr>
-                        }
-                        <tr>
-                            <td class=""></td>
-                            <th class="align-right">Subtotal</th>
-                            <th class="align-right hidden-xs">@Model.OrderSummary.TotalOreVolume.ToString("#,0.00") m<sup>3</sup></th>
-                            <th class="align-right">@Model.OrderSummary.PurchaseCost.ToString("#,0.00")</th>
-                            <th class="align-right hidden-xs">@Model.OrderSummary.PurchaseCostBest.ToString("#,0.00")</th>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="hidden-xs"></td>
-                            <th class="align-right">Shipping</th>
-                            <th class="align-right">@((Model.OrderSummary.SourceStagingShippingCost).ToString("#,0.00"))</th>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="hidden-xs"></td>
-                            <th class="align-right">Total</th>
-                            <th class="align-right">@(Model.OrderSummary.PredictedSell.ToString("#,0.00"))</th>
-                            <td></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
+        @Html.Partial("_OrderSummary", Model.OreOrderSummary)
+    }
+
+    @if (Model.ItemOrderSummary != null)
+    {
+        @Html.Partial("_OrderSummary", Model.ItemOrderSummary)
     }
 </section>
 
 
 @section Modals{
-    @if (Model.OrderSummary != null)
+    @if (Model.OreOrderSummary != null)
     {
-        foreach (var ore in Model.OrderSummary.Ores)
+        foreach (var item in Model.OreOrderSummary.MarketItems)
         {
-            @Html.Partial("_OrderListModal", ore)
+            @Html.Partial("_OrderListModal", item)
         }
     }
-    <div class="modal fade" id="modal-clipboardImport" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Paste desired items</h4>
-                </div>
-                <div class="modal-body form-horizontal">
-                    <form method="post" action="@Url.Action("ParseItems", "Calculator")">
-                        <textarea name="TextInput" rows="15" style="width: 100%;" placeholder="Paste desired items here (e.g., 1000 Tritanium)"></textarea>
-                        <button type="submit" class="btn btn-primary">
-                            Submit
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    @if (Model.ItemOrderSummary != null)
+    {
+        foreach (var item in Model.ItemOrderSummary.MarketItems)
+        {
+            @Html.Partial("_OrderListModal", item)
+        }
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace EveMarket.Core.Models
 {
-    public class BaseMarketItem
+    public class MarketItem
     {
         public long Id { get; set; }
         public string Name { get; set; }

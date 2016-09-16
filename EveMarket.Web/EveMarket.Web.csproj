@@ -61,8 +61,16 @@
       <HintPath>..\packages\eZet.EveLib.Core.3.0.7\lib\net45\EveLib.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EveLib.EveAuth, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\eZet.EveLib.EveAuth.3.0.1.0\lib\net45\EveLib.EveAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EveLib.EveCentral, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\eZet.EveLib.EveCentral.3.0.0\lib\net45\EveLib.EveCentral.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EveLib.EveCrest, Version=3.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\eZet.EveLib.EveCrest.3.4.1\lib\net45\EveLib.EveCrest.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EveLib.EveMarketData">
@@ -335,6 +343,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ItemLookupViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\OreListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -780,6 +789,7 @@
     <Content Include="Views\Calculator\OreCalculator.cshtml" />
     <Content Include="Views\Calculator\_OrderListModal.cshtml" />
     <Content Include="Views\Errors\_NotFound.cshtml" />
+    <Content Include="Views\Calculator\_OrderSummary.cshtml" />
     <None Include="Views\Errors\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>

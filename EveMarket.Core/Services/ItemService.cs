@@ -180,15 +180,14 @@ namespace EveMarket.Core.Services
             return oreGroups.SelectMany(og => og.Ores.Where(o => o.Qty > 0)).ToList();
         }
         
-        public OrderSummary GetOrderSummary(IEnumerable<OreMinerals> ores, List<Mineral> minerals, MineralList mineralList)
+        public OrderSummary GetOrderSummary(IEnumerable<MarketItem> items, List<Mineral> minerals, MineralList mineralList)
         {
-            var oreList = ores.ToList();
+            var itemList = items.ToList();
 
-            var perfectPurchasePrice = oreList.Sum(o => Math.Round(o.Pricing.CalculateBestTotal((int)Math.Ceiling(o.Qty)), 2));
-            var buyAllPurchasePrice = oreList.Sum(o => o.TotalPrice);
-            var mineralBuyAllPurchasePrice = minerals.Sum(m => m.TotalPrice);
-            var totalOreVolume = (decimal)oreList.Sum(o => o.Qty*o.Volume);
-            var totalMineralVolume = minerals.Sum(m => m.Volume*m.DesiredQty);
+            var perfectPurchasePrice = itemList.Sum(o => Math.Round(o.Pricing.CalculateBestTotal((int)Math.Ceiling(o.Qty)), 2));
+            var buyAllPurchasePrice = itemList.Sum(o => o.TotalPrice);
+            
+            var totalOreVolume = (decimal)itemList.Sum(o => o.Qty*o.Volume);
             // TODO: Make shipping cost configurable
             var sourceStagingShippingCost = totalOreVolume*300 + perfectPurchasePrice*.02m;
             var stagingRefineryShippingCost = 0;//totalOreVolume*100;
@@ -200,24 +199,30 @@ namespace EveMarket.Core.Services
             var predictedSell = profitSell + sourceStagingShippingCost;
             var predictedProfit = predictedSell - buyAllPurchasePrice - sourceStagingShippingCost;
 
+            var mineralBuyAllPurchasePrice = minerals?.Sum(m => m.TotalPrice);
+            var totalMineralVolume = minerals?.Sum(m => m.Volume * m.DesiredQty);
             var mineralValueRatio = predictedSell/mineralBuyAllPurchasePrice;
 
-            foreach (var mineral in minerals)
+            if (minerals != null)
             {
-                if (mineral.Qty == 0) continue;
-                mineral.ComparisonTotal = Math.Round(mineral.TotalPrice*mineralValueRatio, 2);
-                mineral.ComparisonPrice = Math.Round(mineral.ComparisonTotal/(decimal)mineral.DesiredQty, 2);
+                foreach (var mineral in minerals)
+                {
+                    if (mineral.Qty == 0) continue;
+                    mineral.ComparisonTotal = Math.Round(mineral.TotalPrice * mineralValueRatio.Value, 2);
+                    mineral.ComparisonPrice = Math.Round(mineral.ComparisonTotal / (decimal)mineral.DesiredQty, 2);
+                }
             }
+            
 
             return new OrderSummary
             {
-                Ores = oreList,
+                MarketItems = itemList,
                 Minerals = minerals,
                 MineralValueRatio = mineralValueRatio,
+                TotalMineralVolume = totalMineralVolume,
                 PurchaseCostBest = perfectPurchasePrice,
                 PurchaseCost = buyAllPurchasePrice,
-                TotalOreVolume = totalOreVolume,
-                TotalMineralVolume = totalMineralVolume,
+                TotalVolume = totalOreVolume,
                 SourceStagingShippingCost = sourceStagingShippingCost,
                 StagingRefineryShippingCost = stagingRefineryShippingCost,
                 RefiningCost = refiningCost,
@@ -226,6 +231,28 @@ namespace EveMarket.Core.Services
                 PredictedSell = predictedSell,
                 PredictedProfit = predictedProfit,
             };
+        }
+
+        public invType GetItem(string itemName)
+        {
+            return _eveDb.invTypes.SingleOrDefault(i => i.typeName == itemName);
+        }
+
+        public OrderSummary GetItemPricing(List<ItemLookup> itemList)
+        {
+            var items = itemList
+                .Select(il => _eveDb.invTypes.SingleOrDefault(i => i.typeID == il.TypeId))
+                .Where(i => i != null)
+                .Select(i => new MarketItem()
+                {
+                    Id = i.typeID,
+                    Name = i.typeName,
+                    Volume = i.volume,
+                    Pricing = GetCurrentItemPricing(i.typeID),
+                    Qty = itemList.First(il => il.TypeId == i.typeID).Qty,
+                });
+            
+            return GetOrderSummary(items, null, null);
         }
 
         public ItemPricing GetCurrentItemPricing(long typeId, long regionId = 10000002, IEnumerable<long> stationIds = null)

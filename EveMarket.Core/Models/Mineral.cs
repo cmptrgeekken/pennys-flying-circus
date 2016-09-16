@@ -2,7 +2,7 @@
 
 namespace EveMarket.Core.Models
 {
-    public class Mineral : BaseMarketItem
+    public class Mineral : MarketItem
     {
         public MineralType MineralType { get; set; }
         public ReprocessingType PrimaryOreReprocessingType { get; set; }

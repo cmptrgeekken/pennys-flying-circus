@@ -123,6 +123,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.102.0\lib\net451\System.Data.SQLite.dll</HintPath>
@@ -154,11 +155,12 @@
     <Compile Include="Enums\MineralType.cs" />
     <Compile Include="Enums\ReprocessingType.cs" />
     <Compile Include="Models\AdjustedMarketOrder.cs" />
-    <Compile Include="Models\BaseMarketItem.cs" />
+    <Compile Include="Models\MarketItem.cs" />
     <Compile Include="Models\CrestApi\CrestMarketOrder.cs" />
     <Compile Include="Models\CrestApi\CrestMarketOrderList.cs" />
     <Compile Include="Models\FlyingCircus\MarketOrderList.cs" />
     <Compile Include="Models\FlyingCircus\RegionMarketOrders.cs" />
+    <Compile Include="Models\ItemLookup.cs" />
     <Compile Include="Models\ItemPricing.cs" />
     <Compile Include="Models\Mineral.cs" />
     <Compile Include="Models\MineralList.cs" />
@@ -252,6 +254,8 @@
     <Compile Include="Repositories\trnTranslationLanguage.cs" />
     <Compile Include="Repositories\warCombatZone.cs" />
     <Compile Include="Repositories\warCombatZoneSystem.cs" />
+    <Compile Include="Services\EveService.cs" />
+    <Compile Include="Services\Interfaces\IEveService.cs" />
     <Compile Include="Services\Interfaces\IItemService.cs" />
     <Compile Include="Services\Interfaces\IPlayerService.cs" />
     <Compile Include="Services\ItemService.cs" />

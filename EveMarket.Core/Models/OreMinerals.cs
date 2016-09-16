@@ -2,7 +2,7 @@
 
 namespace EveMarket.Core.Models
 {
-    public class OreMinerals : BaseMarketItem
+    public class OreMinerals : MarketItem
     {
         public double YieldModifier { get; set; }
         public ReprocessingType ReprocessingType { get; set; }
