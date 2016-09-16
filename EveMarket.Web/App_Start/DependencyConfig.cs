@@ -53,8 +53,10 @@ namespace EveMarket.Web
 
             builder.RegisterType<EveCrest>()
                 .AsSelf()
-                .InstancePerRequest()
-                .UsingConstructor(typeof(string),typeof(string));
+                .InstancePerRequest();
+
+            builder.RegisterType<EveService>()
+                .As<IEveService>();
 
             builder.RegisterType<TaskConfig>()
                 .AsSelf();

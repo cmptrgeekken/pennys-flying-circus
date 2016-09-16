@@ -4,7 +4,9 @@ using EveMarket.Core.Models;
 using EveMarket.Web.Models;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using eZet.EveLib.EveAuthModule;
 using EveMarket.Core.Services;
 using EveMarket.Core.Services.Interfaces;
 
@@ -14,15 +16,12 @@ namespace EveMarket.Web.Controllers
     {
         private readonly IItemService _itemService;
         private readonly IPlayerService _playerService;
-        private readonly IEveService _eveService;
+        private IEveService _eveService;
 
         public CalculatorController(IPlayerService playerService, IItemService itemService)
         {
             _playerService = playerService;
             _itemService = itemService;
-
-
-            _eveService = new EveService(Session["RefreshToken"] as string);
         }
 
 
@@ -32,13 +31,14 @@ namespace EveMarket.Web.Controllers
             return View();
         }
 
-        //public ActionResult FittingsSelector()
-        //{
-        //    //var fittings = _eveService.GetFittings();
+        public async Task<ActionResult> FittingsSelector()
+        {
+            _eveService = new EveService(Session["RefreshToken"] as string);
 
+            var fittings = await _eveService.GetFittings();
 
-        //    //return View(viewModel);
-        //}
+            return View(fittings);
+        }
 
 
         [HttpGet]

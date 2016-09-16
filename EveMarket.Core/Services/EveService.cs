@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using eZet.EveLib.EveAuthModule;
 using eZet.EveLib.EveCrestModule;
 using eZet.EveLib.EveCrestModule.Models.Links;
+using eZet.EveLib.EveCrestModule.Models.Resources;
 using EveMarket.Core.Services.Interfaces;
 
 namespace EveMarket.Core.Services
@@ -30,9 +33,13 @@ namespace EveMarket.Core.Services
             _eveCrest = new EveCrest(refreshToken, GenerateEncryptedKey());
         }
 
-        public void GetFittings()
+        public async Task<IEnumerable<FittingCollection.Fitting>> GetFittings()
         {
-            
+            return
+                (await
+                    (await
+                        (await (await _eveCrest.GetRootAsync()).QueryAsync(r => r.Decode)).QueryAsync(r => r.Character))
+                        .QueryAsync(r => r.Fittings)).AllItems();
         }
 
         public string GetAuthLink()
@@ -46,6 +53,11 @@ namespace EveMarket.Core.Services
             var authResponse = await _eveAuth.AuthenticateAsync(encryptedKey, authCode);
 
             return authResponse;
+        }
+
+        public async Task<VerifyResponse> GetVerifyResponse(string accessToken)
+        {
+            return await _eveAuth.VerifyAsync(accessToken);
         }
 
         protected string GenerateEncryptedKey()

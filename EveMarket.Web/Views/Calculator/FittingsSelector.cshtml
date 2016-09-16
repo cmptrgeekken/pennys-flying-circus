@@ -1,0 +1,26 @@
+﻿@model System.Collections.Generic.IEnumerable<eZet.EveLib.EveCrestModule.Models.Resources.FittingCollection.Fitting>
+
+@{
+    ViewBag.Title = "Fittings";
+}
+<section class="bg-19 bg-center bg-cover">
+    <div>
+        <div class="container section-lg">
+            <h1 class="top-title">Fittings List</h1>
+        </div>
+    </div>
+</section>
+
+<section class="container section-lg">
+
+    <div class="row">
+        <div class="col-md-4">
+            <ul>
+                @foreach (var fitting in Model)
+                {
+                    <li>@fitting.Name</li>
+                }
+            </ul>
+        </div>
+    </div>
+</section>

@@ -790,6 +790,7 @@
     <Content Include="Views\Calculator\_OrderListModal.cshtml" />
     <Content Include="Views\Errors\_NotFound.cshtml" />
     <Content Include="Views\Calculator\_OrderSummary.cshtml" />
+    <None Include="Views\Calculator\FittingsSelector.cshtml" />
     <None Include="Views\Errors\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -67,7 +67,9 @@ namespace EveMarket.Web.Controllers
             {
                 case "crest-login":
                     var authResponse = await _eveService.GetAuthResponse(code);
+                    var verifiedResponse = await _eveService.GetVerifyResponse(authResponse.AccessToken);
 
+                    Session["VerifiedResponse"] = verifiedResponse;
                     Session["RefreshToken"] = authResponse.RefreshToken;
 
                     return RedirectToAction("Index", "Home");
