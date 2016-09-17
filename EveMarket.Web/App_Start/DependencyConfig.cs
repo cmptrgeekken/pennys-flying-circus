@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Web.Mvc;
 using Autofac;
-using Autofac.Core.Activators.Reflection;
 using Autofac.Integration.Mvc;
 using eZet.EveLib.EveAuthModule;
 using eZet.EveLib.EveCrestModule;
-using EveMarket.Core.Models.FlyingCircus;
 using EveMarket.Core.Repositories;
 using EveMarket.Core.Services;
 using EveMarket.Core.Services.Interfaces;
@@ -38,9 +36,6 @@ namespace EveMarket.Web
 
             builder.RegisterType<LiteDatabase>()
                 .WithParameter("connectionString", $@"{dataDirectory}\FlyingCircus.db")
-                .AsSelf();
-
-            builder.RegisterType<FlyingCircusContext>()
                 .AsSelf();
 
             builder.RegisterType<EveDb>()
