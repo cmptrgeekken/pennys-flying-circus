@@ -5,7 +5,7 @@
             Items to Purchase
             <i>
                 <small>
-                    (Last Updated: <time class="timeago" datetime="@Model.MarketItems.First().Pricing.LastUpdated.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")">
+                    (Last Updated: <time class="timeago" datetime="@Model.MarketItems.First().Pricing.LastUpdated.Value.ToString("yyyy-MM-ddTHH:mm:ssZ")">
                         @Model.MarketItems.First().Pricing.LastUpdated.Value.ToString("G")
                     </time>)
                 </small>

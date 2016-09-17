@@ -53,6 +53,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework.MappingAPI, Version=6.0.0.7, Culture=neutral, PublicKeyToken=7ee2e825d201459e, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.MappingAPI.6.0.0.7\lib\net45\EntityFramework.MappingAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
@@ -152,14 +156,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\IndustryActivityType.cs" />
     <Compile Include="Enums\MineralType.cs" />
     <Compile Include="Enums\ReprocessingType.cs" />
     <Compile Include="Models\AdjustedMarketOrder.cs" />
+    <Compile Include="Models\FlyingCircus\FlyingCircusContext.cs" />
     <Compile Include="Models\MarketItem.cs" />
     <Compile Include="Models\CrestApi\CrestMarketOrder.cs" />
     <Compile Include="Models\CrestApi\CrestMarketOrderList.cs" />
-    <Compile Include="Models\FlyingCircus\MarketOrderList.cs" />
-    <Compile Include="Models\FlyingCircus\RegionMarketOrders.cs" />
+    <Compile Include="Models\FlyingCircus\RegionMarketOrder.cs" />
     <Compile Include="Models\ItemLookup.cs" />
     <Compile Include="Models\ItemPricing.cs" />
     <Compile Include="Models\Mineral.cs" />

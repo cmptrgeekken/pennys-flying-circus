@@ -5,8 +5,10 @@ using EveMarket.Core.Repositories;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using EveMarket.Core.Models.FlyingCircus;
 using EveMarket.Core.Services.Interfaces;
 using LiteDB;
@@ -238,6 +240,15 @@ namespace EveMarket.Core.Services
             return _eveDb.invTypes.SingleOrDefault(i => i.typeName == itemName);
         }
 
+        //public invType GetBlueprints(string name)
+        //{
+        //    var matchedTypes = _eveDb.invTypes.Where(t => t.typeName.StartsWith(name));
+
+        //    var activities =
+        //        _eveDb.industryActivityProducts.Where(a => a.activityID == (int) IndustryActivityType.Manufacturing);
+            
+        //}
+
         public OrderSummary GetItemPricing(List<ItemLookup> itemList)
         {
             var items = itemList
@@ -262,13 +273,15 @@ namespace EveMarket.Core.Services
             var regionStations = regionConstellations.SelectMany(c => c.stations).ToList();
             var stationDict = regionStations.ToDictionary(s => s.stationID, s => s.stationName);
 
-            var sellOrders = _liteDb.GetCollection<MarketOrderList>("sellOrders");
+            var sellOrders = _liteDb.GetCollection<RegionMarketOrder>("region-market-orders");
 
-            var marketOrders = sellOrders.FindOne(o => o.TypeId == typeId && o.RegionId == regionId);
+            //var sellOrders = _circusContext.MarketOrders;
 
-            if (marketOrders != null)
+            var regionOrders = sellOrders.FindOne(o => o.TypeId == typeId && o.RegionId == regionId);
+
+            if (regionOrders != null)
             {
-                foreach (var marketOrder in marketOrders.Orders)
+                foreach (var marketOrder in regionOrders.MarketOrders)
                 {
                     marketOrder.StationName = stationDict[marketOrder.StationId];
                 }
@@ -276,8 +289,8 @@ namespace EveMarket.Core.Services
                 var itemPricing = new ItemPricing
                 {
                     RegionId = regionId,
-                    LastUpdated = marketOrders.LastUpdated,
-                    MarketOrders = marketOrders.Orders,
+                    LastUpdated = regionOrders.LastUpdated,
+                    MarketOrders = regionOrders.MarketOrders,
                     // TODO Make station ID configurable
                     AllowedStationIds = new List<long> { 60003760 },
                 };
@@ -294,47 +307,49 @@ namespace EveMarket.Core.Services
 
             var marketOrders = new List<CrestMarketOrder>();
             var currentPage = 1;
-            using (var client = new WebClient())
-            {
-                client.Proxy = null;
 
-                CrestMarketOrderList result;
-                do
+
+            CrestMarketOrderList result;
+            do
+            {
+                var webRequest = (HttpWebRequest)WebRequest.Create(string.Format(crestUrl, currentPage));
+                webRequest.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+
+                using (var response = webRequest.GetResponse())
+                using (var reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
                 {
-                    var content = client.DownloadString(string.Format(crestUrl, currentPage));
+                    var content = reader.ReadToEnd();
                     result = JsonConvert.DeserializeObject<CrestMarketOrderList>(content);
 
                     marketOrders.AddRange(result.Items);
-                } while (currentPage++ < result.PageCount);
-            }
+                }
+            } while (currentPage++ < result.PageCount);
 
             var sellOrders = marketOrders.Where(o => !o.Buy)
                 .OrderBy(o => o.Price)
                 .GroupBy(o => o.Type)
-                .Select(o => new MarketOrderList
+                .Select(o => new RegionMarketOrder
                 {
                     TypeId = o.Key,
                     RegionId = regionId,
                     LastUpdated = DateTime.UtcNow,
-                    Orders = o.Select(i => new MarketOrder
+                    MarketOrders = o.Select(i => new MarketOrder
                     {
                         Price = i.Price,
                         StationId = i.StationId,
-                        //StationName = regionStations[i.StationId],
                         TypeId = i.Type,
                         Volume = i.Volume,
                     })
                 });
-
             using (var trans = _liteDb.BeginTrans())
             {
-                var orders = _liteDb.GetCollection<MarketOrderList>("sellOrders");
-
-                orders.Delete(i => i.RegionId == regionId);
-                orders.Insert(sellOrders);
+                var orders = _liteDb.GetCollection<RegionMarketOrder>("region-market-orders");
 
                 orders.EnsureIndex(i => i.RegionId);
                 orders.EnsureIndex(i => i.TypeId);
+
+                orders.Delete(o => o.RegionId == regionId);
+                orders.Insert(sellOrders);
 
                 trans.Commit();
             }

@@ -31,6 +31,17 @@ namespace EveMarket.Web.Controllers
             return View();
         }
 
+        public JsonResult GetBlueprints(string prefix)
+        {
+            return Json("");
+        }
+
+        public ActionResult BlueprintCalculator()
+        {
+            return View();
+        }
+
+
         public async Task<ActionResult> FittingsSelector()
         {
             _eveService = new EveService(Session["RefreshToken"] as string);
@@ -67,8 +78,8 @@ namespace EveMarket.Web.Controllers
             {
                 new Regex(@"^\[(?<itemName>[^,]+),"),
                 new Regex(@"^(?<itemName>[^\t]+)\t(?<itemQty>[\d,]+)$"),
-                new Regex(@"^(?<itemName>.+?)(\sx(?<itemQty>[\d,]+))?$"),
                 new Regex(@"^(?<itemQty>[\d,]+)x?\s+(?<itemName>[^\t]+)"),
+                new Regex(@"^(?<itemName>.+?)(\sx(?<itemQty>[\d,]+))?$"),
                 new Regex(@"^(?<itemName>[^\d\t]+)"),
             };
 
