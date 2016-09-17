@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EveMarket.Core</RootNamespace>
     <AssemblyName>EveMarket.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -129,16 +129,16 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.102.0\lib\net451\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.103.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.103\lib\net46\System.Data.SQLite.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.SQLite.EF6, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.102.0\lib\net451\System.Data.SQLite.EF6.dll</HintPath>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.103.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.103\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.102.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.103.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.103\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Caching" />
@@ -174,89 +174,94 @@
     <Compile Include="Models\OreMinerals.cs" />
     <Compile Include="Models\ReprocessingSkills.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\agtAgent.cs" />
-    <Compile Include="Repositories\agtAgentType.cs" />
-    <Compile Include="Repositories\agtResearchAgent.cs" />
-    <Compile Include="Repositories\certCert.cs" />
-    <Compile Include="Repositories\chrAncestry.cs" />
-    <Compile Include="Repositories\chrAttribute.cs" />
-    <Compile Include="Repositories\chrBloodline.cs" />
-    <Compile Include="Repositories\chrFaction.cs" />
-    <Compile Include="Repositories\chrRace.cs" />
-    <Compile Include="Repositories\crpActivity.cs" />
-    <Compile Include="Repositories\crpNPCCorporation.cs" />
-    <Compile Include="Repositories\crpNPCCorporationDivision.cs" />
-    <Compile Include="Repositories\crpNPCCorporationResearchField.cs" />
-    <Compile Include="Repositories\crpNPCCorporationTrade.cs" />
-    <Compile Include="Repositories\crpNPCDivision.cs" />
-    <Compile Include="Repositories\dgmAttributeCategory.cs" />
-    <Compile Include="Repositories\dgmAttributeType.cs" />
-    <Compile Include="Repositories\dgmEffect.cs" />
-    <Compile Include="Repositories\dgmExpression.cs" />
-    <Compile Include="Repositories\dgmTypeAttribute.cs" />
-    <Compile Include="Repositories\dgmTypeEffect.cs" />
-    <Compile Include="Repositories\EveDb.cs" />
-    <Compile Include="Repositories\eveGraphic.cs" />
-    <Compile Include="Repositories\eveIcon.cs" />
-    <Compile Include="Repositories\eveUnit.cs" />
     <Compile Include="Models\FlyingCircus\MarketOrder.cs" />
     <Compile Include="Models\FlyingCircus\MineralQuote.cs" />
-    <Compile Include="Repositories\industryActivity.cs" />
-    <Compile Include="Repositories\industryBlueprint.cs" />
-    <Compile Include="Repositories\invCategory.cs" />
-    <Compile Include="Repositories\invContrabandType.cs" />
-    <Compile Include="Repositories\invControlTowerResource.cs" />
-    <Compile Include="Repositories\invControlTowerResourcePurpos.cs" />
-    <Compile Include="Repositories\invFlag.cs" />
-    <Compile Include="Repositories\invGroup.cs" />
-    <Compile Include="Repositories\invItem.cs" />
-    <Compile Include="Repositories\invMarketGroup.cs" />
-    <Compile Include="Repositories\invMetaGroup.cs" />
-    <Compile Include="Repositories\invMetaType.cs" />
-    <Compile Include="Repositories\invName.cs" />
-    <Compile Include="Repositories\invPosition.cs" />
-    <Compile Include="Repositories\invTrait.cs" />
-    <Compile Include="Repositories\invType.cs" />
-    <Compile Include="Repositories\invTypeMaterial.cs" />
-    <Compile Include="Repositories\invTypeReaction.cs" />
-    <Compile Include="Repositories\invUniqueName.cs" />
-    <Compile Include="Repositories\invVolume.cs" />
-    <Compile Include="Repositories\mapCelestialStatistic.cs" />
-    <Compile Include="Repositories\mapConstellation.cs" />
-    <Compile Include="Repositories\mapConstellationJump.cs" />
-    <Compile Include="Repositories\mapDenormalize.cs" />
-    <Compile Include="Repositories\mapJump.cs" />
-    <Compile Include="Repositories\mapLandmark.cs" />
-    <Compile Include="Repositories\mapLocationScene.cs" />
-    <Compile Include="Repositories\mapLocationWormholeClass.cs" />
-    <Compile Include="Repositories\mapRegion.cs" />
-    <Compile Include="Repositories\mapRegionJump.cs" />
-    <Compile Include="Repositories\mapSolarSystem.cs" />
-    <Compile Include="Repositories\mapSolarSystemJump.cs" />
-    <Compile Include="Repositories\mapUniverse.cs" />
-    <Compile Include="Repositories\planetSchematic.cs" />
-    <Compile Include="Repositories\planetSchematicsPinMap.cs" />
-    <Compile Include="Repositories\planetSchematicsTypeMap.cs" />
-    <Compile Include="Repositories\ramActivity.cs" />
-    <Compile Include="Repositories\ramAssemblyLineStation.cs" />
-    <Compile Include="Repositories\ramAssemblyLineType.cs" />
-    <Compile Include="Repositories\ramAssemblyLineTypeDetailPerCategory.cs" />
-    <Compile Include="Repositories\ramAssemblyLineTypeDetailPerGroup.cs" />
-    <Compile Include="Repositories\ramInstallationTypeContent.cs" />
-    <Compile Include="Repositories\skin.cs" />
-    <Compile Include="Repositories\skinLicense.cs" />
-    <Compile Include="Repositories\skinMaterial.cs" />
-    <Compile Include="Repositories\staOperation.cs" />
-    <Compile Include="Repositories\staOperationService.cs" />
-    <Compile Include="Repositories\staService.cs" />
-    <Compile Include="Repositories\staStation.cs" />
-    <Compile Include="Repositories\staStationType.cs" />
-    <Compile Include="Repositories\translationTable.cs" />
-    <Compile Include="Repositories\trnTranslation.cs" />
-    <Compile Include="Repositories\trnTranslationColumn.cs" />
-    <Compile Include="Repositories\trnTranslationLanguage.cs" />
-    <Compile Include="Repositories\warCombatZone.cs" />
-    <Compile Include="Repositories\warCombatZoneSystem.cs" />
+    <Compile Include="Repositories\Eve\agtAgent.cs" />
+    <Compile Include="Repositories\Eve\agtAgentType.cs" />
+    <Compile Include="Repositories\Eve\agtResearchAgent.cs" />
+    <Compile Include="Repositories\Eve\certCert.cs" />
+    <Compile Include="Repositories\Eve\chrAncestry.cs" />
+    <Compile Include="Repositories\Eve\chrAttribute.cs" />
+    <Compile Include="Repositories\Eve\chrBloodline.cs" />
+    <Compile Include="Repositories\Eve\chrFaction.cs" />
+    <Compile Include="Repositories\Eve\chrRace.cs" />
+    <Compile Include="Repositories\Eve\crpActivity.cs" />
+    <Compile Include="Repositories\Eve\crpNPCCorporation.cs" />
+    <Compile Include="Repositories\Eve\crpNPCCorporationDivision.cs" />
+    <Compile Include="Repositories\Eve\crpNPCCorporationResearchField.cs" />
+    <Compile Include="Repositories\Eve\crpNPCCorporationTrade.cs" />
+    <Compile Include="Repositories\Eve\crpNPCDivision.cs" />
+    <Compile Include="Repositories\Eve\dgmAttributeCategory.cs" />
+    <Compile Include="Repositories\Eve\dgmAttributeType.cs" />
+    <Compile Include="Repositories\Eve\dgmEffect.cs" />
+    <Compile Include="Repositories\Eve\dgmExpression.cs" />
+    <Compile Include="Repositories\Eve\dgmTypeAttribute.cs" />
+    <Compile Include="Repositories\Eve\dgmTypeEffect.cs" />
+    <Compile Include="Repositories\Eve\EveDb.cs" />
+    <Compile Include="Repositories\Eve\eveGraphic.cs" />
+    <Compile Include="Repositories\Eve\eveIcon.cs" />
+    <Compile Include="Repositories\Eve\eveUnit.cs" />
+    <Compile Include="Repositories\Eve\industryActivity.cs" />
+    <Compile Include="Repositories\Eve\industryActivityMaterial.cs" />
+    <Compile Include="Repositories\Eve\industryActivityProbability.cs" />
+    <Compile Include="Repositories\Eve\industryActivityProduct.cs" />
+    <Compile Include="Repositories\Eve\industryActivityRace.cs" />
+    <Compile Include="Repositories\Eve\industryActivitySkill.cs" />
+    <Compile Include="Repositories\Eve\industryBlueprint.cs" />
+    <Compile Include="Repositories\Eve\invCategory.cs" />
+    <Compile Include="Repositories\Eve\invContrabandType.cs" />
+    <Compile Include="Repositories\Eve\invControlTowerResource.cs" />
+    <Compile Include="Repositories\Eve\invControlTowerResourcePurpos.cs" />
+    <Compile Include="Repositories\Eve\invFlag.cs" />
+    <Compile Include="Repositories\Eve\invGroup.cs" />
+    <Compile Include="Repositories\Eve\invItem.cs" />
+    <Compile Include="Repositories\Eve\invMarketGroup.cs" />
+    <Compile Include="Repositories\Eve\invMetaGroup.cs" />
+    <Compile Include="Repositories\Eve\invMetaType.cs" />
+    <Compile Include="Repositories\Eve\invName.cs" />
+    <Compile Include="Repositories\Eve\invPosition.cs" />
+    <Compile Include="Repositories\Eve\invTrait.cs" />
+    <Compile Include="Repositories\Eve\invType.cs" />
+    <Compile Include="Repositories\Eve\invTypeMaterial.cs" />
+    <Compile Include="Repositories\Eve\invTypeReaction.cs" />
+    <Compile Include="Repositories\Eve\invUniqueName.cs" />
+    <Compile Include="Repositories\Eve\invVolume.cs" />
+    <Compile Include="Repositories\Eve\mapCelestialStatistic.cs" />
+    <Compile Include="Repositories\Eve\mapConstellation.cs" />
+    <Compile Include="Repositories\Eve\mapConstellationJump.cs" />
+    <Compile Include="Repositories\Eve\mapDenormalize.cs" />
+    <Compile Include="Repositories\Eve\mapJump.cs" />
+    <Compile Include="Repositories\Eve\mapLandmark.cs" />
+    <Compile Include="Repositories\Eve\mapLocationScene.cs" />
+    <Compile Include="Repositories\Eve\mapLocationWormholeClass.cs" />
+    <Compile Include="Repositories\Eve\mapRegion.cs" />
+    <Compile Include="Repositories\Eve\mapRegionJump.cs" />
+    <Compile Include="Repositories\Eve\mapSolarSystem.cs" />
+    <Compile Include="Repositories\Eve\mapSolarSystemJump.cs" />
+    <Compile Include="Repositories\Eve\mapUniverse.cs" />
+    <Compile Include="Repositories\Eve\planetSchematic.cs" />
+    <Compile Include="Repositories\Eve\planetSchematicsPinMap.cs" />
+    <Compile Include="Repositories\Eve\planetSchematicsTypeMap.cs" />
+    <Compile Include="Repositories\Eve\ramActivity.cs" />
+    <Compile Include="Repositories\Eve\ramAssemblyLineStation.cs" />
+    <Compile Include="Repositories\Eve\ramAssemblyLineType.cs" />
+    <Compile Include="Repositories\Eve\ramAssemblyLineTypeDetailPerCategory.cs" />
+    <Compile Include="Repositories\Eve\ramAssemblyLineTypeDetailPerGroup.cs" />
+    <Compile Include="Repositories\Eve\ramInstallationTypeContent.cs" />
+    <Compile Include="Repositories\Eve\skin.cs" />
+    <Compile Include="Repositories\Eve\skinLicense.cs" />
+    <Compile Include="Repositories\Eve\skinMaterial.cs" />
+    <Compile Include="Repositories\Eve\staOperation.cs" />
+    <Compile Include="Repositories\Eve\staOperationService.cs" />
+    <Compile Include="Repositories\Eve\staService.cs" />
+    <Compile Include="Repositories\Eve\staStation.cs" />
+    <Compile Include="Repositories\Eve\staStationType.cs" />
+    <Compile Include="Repositories\Eve\translationTable.cs" />
+    <Compile Include="Repositories\Eve\trnTranslation.cs" />
+    <Compile Include="Repositories\Eve\trnTranslationColumn.cs" />
+    <Compile Include="Repositories\Eve\trnTranslationLanguage.cs" />
+    <Compile Include="Repositories\Eve\warCombatZone.cs" />
+    <Compile Include="Repositories\Eve\warCombatZoneSystem.cs" />
     <Compile Include="Services\EveService.cs" />
     <Compile Include="Services\Interfaces\IEveService.cs" />
     <Compile Include="Services\Interfaces\IItemService.cs" />
@@ -285,15 +290,16 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\SQLite.Native.3.12.3\build\net45\SQLite.Native.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SQLite.Native.3.12.3\build\net45\SQLite.Native.props'))" />
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.103\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.103\build\net46\System.Data.SQLite.Core.targets'))" />
   </Target>
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets')" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.103\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.103\build\net46\System.Data.SQLite.Core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

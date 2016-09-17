@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using EveMarket.Core.Models;
-using EveMarket.Core.Repositories;
+using EveMarket.Core.Repositories.Eve;
 
 namespace EveMarket.Core.Services.Interfaces
 {

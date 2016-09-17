@@ -4,7 +4,7 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using eZet.EveLib.EveAuthModule;
 using eZet.EveLib.EveCrestModule;
-using EveMarket.Core.Repositories;
+using EveMarket.Core.Repositories.Eve;
 using EveMarket.Core.Services;
 using EveMarket.Core.Services.Interfaces;
 using LiteDB;

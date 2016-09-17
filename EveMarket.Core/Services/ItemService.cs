@@ -1,7 +1,6 @@
 ﻿using EveMarket.Core.Enums;
 using EveMarket.Core.Models;
 using EveMarket.Core.Models.CrestApi;
-using EveMarket.Core.Repositories;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using EveMarket.Core.Models.FlyingCircus;
+using EveMarket.Core.Repositories.Eve;
 using EveMarket.Core.Services.Interfaces;
 using LiteDB;
 
@@ -269,13 +269,10 @@ namespace EveMarket.Core.Services
         public ItemPricing GetCurrentItemPricing(long typeId, long regionId = 10000002, IEnumerable<long> stationIds = null)
         {
             var region = _eveDb.mapRegions.Single(r => r.regionID == regionId);
-            var regionConstellations = region.constellations.ToList();
-            var regionStations = regionConstellations.SelectMany(c => c.stations).ToList();
+            var regionStations = region.stations.ToList();
             var stationDict = regionStations.ToDictionary(s => s.stationID, s => s.stationName);
 
             var sellOrders = _liteDb.GetCollection<RegionMarketOrder>("region-market-orders");
-
-            //var sellOrders = _circusContext.MarketOrders;
 
             var regionOrders = sellOrders.FindOne(o => o.TypeId == typeId && o.RegionId == regionId);
 
