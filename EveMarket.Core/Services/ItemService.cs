@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using eZet.EveLib.EveCrestModule;
 using EveMarket.Core.Models.FlyingCircus;
 using EveMarket.Core.Repositories.Eve;
 using EveMarket.Core.Services.Interfaces;
@@ -240,14 +241,78 @@ namespace EveMarket.Core.Services
             return _eveDb.invTypes.SingleOrDefault(i => i.typeName == itemName);
         }
 
-        //public invType GetBlueprints(string name)
-        //{
-        //    var matchedTypes = _eveDb.invTypes.Where(t => t.typeName.StartsWith(name));
+        public IEnumerable<Blueprint> GetBlueprints(string name)
+        {
+            name = name.ToLowerInvariant();
+            var matchedTypes = _eveDb.industryActivityProducts.Where(t =>
+                true == t.type.published
+                && true == t.productType.published
+                && t.productType.typeName.ToLower().StartsWith(name)
+                && t.productType.invGroup.invCategory.categoryName != "Blueprint")
+                .OrderBy(t => t.productType.typeName);
 
-        //    var activities =
-        //        _eveDb.industryActivityProducts.Where(a => a.activityID == (int) IndustryActivityType.Manufacturing);
-            
-        //}
+            return matchedTypes.ToList().Select(bp => new Blueprint
+            {
+                TypeId = bp.productTypeID,
+                TypeName = bp.productType.typeName,
+            });
+        }
+
+        public Blueprint GetBlueprint(int typeId, IndustryActivityType activityType)
+        {
+            var bp = _eveDb.industryActivityProducts.SingleOrDefault(p => p.productTypeID == typeId && p.activityID == (int)activityType);
+
+            return bp == null
+                ? null
+                : new Blueprint
+                {
+                    TypeId = bp.productTypeID,
+                    TypeName = bp.productType.typeName,
+                    Skills =
+                        bp.type.typeSkills.Where(a => a.activityID == (int) IndustryActivityType.Manufacturing)
+                            .ToList()
+                            .Select(s => new BlueprintSkill
+                            {
+                                SkillId = s.skillID,
+                                SkillName = s.skillType.typeName,
+                                MinimumLevel = s.level,
+                            }),
+                    Materials = GetMaterials(bp.type),
+                };
+        }
+
+        protected IEnumerable<BlueprintMaterial> GetMaterials(invType type)
+        {
+            if (type == null)
+            {
+                return new List<BlueprintMaterial>();
+            }
+
+            return type.industryActivityMaterials.Where(am => am.activityID == (int)IndustryActivityType.Manufacturing)
+                .ToList()
+                .Select(m => new BlueprintMaterial()
+                {
+                    TypeId = m.materialTypeID,
+                    TypeName = m.materialType.typeName,
+                    Qty = m.quantity,
+                    Volume =m.materialType.volume,
+                    Skills = m.type.typeSkills.Where(a => a.activityID == (int)IndustryActivityType.Manufacturing).ToList().Select(s => new BlueprintSkill
+                    {
+                        SkillId = s.skillID,
+                        SkillName = s.skillType.typeName,
+                        MinimumLevel = s.level,
+                    }),
+                    Materials = GetMaterials(m.materialType.activityProducts.Where(p => p.activityID == (int)IndustryActivityType.Manufacturing).Select(p => p.type).SingleOrDefault())
+                });
+        }
+
+        public IEnumerable<mapSolarSystem> GetSystems(string prefix)
+        {
+            prefix = prefix.ToLowerInvariant();
+            var systems = _eveDb.mapSolarSystems.Where(s => s.solarSystemName.ToLower().StartsWith(prefix));
+
+            return systems.ToList();
+        }
 
         public OrderSummary GetItemPricing(List<ItemLookup> itemList)
         {

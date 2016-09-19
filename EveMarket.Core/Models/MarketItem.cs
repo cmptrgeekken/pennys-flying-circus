@@ -13,5 +13,6 @@ namespace EveMarket.Core.Models
         public decimal TotalPriceBest => Math.Round((decimal)Pricing.CalculateBestTotal((int) Math.Ceiling(Qty)), 2);
         public decimal AveragePrice => Qty > 0 ? Math.Round(TotalPrice / (decimal)Qty, 2) : 0;
         public double TotalVolume => Qty*Volume;
+
     }
 }

@@ -7,6 +7,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using eZet.EveLib.EveAuthModule;
+using EveMarket.Core.Enums;
+using EveMarket.Core.Repositories.Eve;
 using EveMarket.Core.Services;
 using EveMarket.Core.Services.Interfaces;
 
@@ -31,14 +33,36 @@ namespace EveMarket.Web.Controllers
             return View();
         }
 
+        public JsonResult GetSystems(string prefix)
+        {
+            var systems = _itemService.GetSystems(prefix);
+
+            var viewModel = systems.Select(s => new
+            {
+                SystemId = s.solarSystemID,
+                SystemName = s.solarSystemName
+            });
+
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetBlueprints(string prefix)
         {
-            return Json("");
+            var bps = _itemService.GetBlueprints(prefix);
+            
+            return Json(bps, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetBlueprintDetails(int typeId)
+        {
+            var details = _itemService.GetBlueprint(typeId, IndustryActivityType.Manufacturing);
+
+            return Json(details, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult BlueprintCalculator()
         {
-            return View();
+            return View((OreListModel)null);
         }
 
 

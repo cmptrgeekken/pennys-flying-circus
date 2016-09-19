@@ -492,8 +492,14 @@
     <Content Include="Content\img\sy-loader.gif" />
     <Content Include="Content\img\U7Fc1e.jpg" />
     <Content Include="Content\img\webdesign.jpg" />
+    <Content Include="Content\js\app\app.module.js" />
+    <Content Include="Content\js\app\app.routes.js" />
+    <Content Include="Content\js\app\components\blueprints\blueprintController.js" />
+    <Content Include="Content\js\app\components\blueprints\blueprintService.js" />
+    <Content Include="Content\js\app\components\blueprints\blueprintView.html" />
     <Content Include="Content\js\bootstrap-hover-dropdown.js" />
     <Content Include="Content\js\contact-form.js" />
+    <Content Include="Content\js\custom.js" />
     <Content Include="Content\js\jquery.timeago.js" />
     <Content Include="Content\js\min\bootstrap-hover-dropdown.min.js" />
     <Content Include="Content\js\min\contact-form.min.js" />
@@ -638,12 +644,12 @@
     <Content Include="Content\plugins\WOW-master\demo.html" />
     <Content Include="Content\plugins\WOW-master\spec\javascripts\fixtures\custom.html" />
     <Content Include="Content\plugins\WOW-master\spec\javascripts\fixtures\simple.html" />
+    <Content Include="Content\select2.css" />
+    <Content Include="Content\select2.png" />
+    <Content Include="Content\select2x2.png" />
+    <Content Include="Content\spinner.gif" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\ai.0.15.0-build58334.js" />
-    <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -745,18 +751,6 @@
     <Content Include="Content\plugins\WOW-master\spec\coffeescripts\wow-spec.coffee" />
     <Content Include="Content\plugins\WOW-master\src\wow.coffee" />
     <Content Include="Content\img\icons\manifest.json" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -798,12 +792,14 @@
     <Content Include="Views\Calculator\_OrderListModal.cshtml" />
     <Content Include="Views\Errors\_NotFound.cshtml" />
     <Content Include="Views\Calculator\_OrderSummary.cshtml" />
+    <Content Include="Views\Calculator\BlueprintCalculator.cshtml" />
     <None Include="Views\Calculator\FittingsSelector.cshtml" />
     <None Include="Views\Errors\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Config\" />
+    <Folder Include="Content\js\app\shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -811,7 +807,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EveMarket.Core\EveMarket.Core.csproj">

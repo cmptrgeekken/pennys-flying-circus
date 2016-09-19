@@ -1,0 +1,193 @@
+﻿@model EveMarket.Web.Models.OreListModel
+
+@{
+    ViewBag.Title = "Blueprint Calculator";
+}
+
+<section class="bg-19 bg-center bg-cover">
+    <div>
+        <div class="container section-lg">
+            <h1 class="top-title">Blueprint Calculator</h1>
+        </div>
+    </div>
+</section>
+
+<section class="container section-lg">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Blueprints</h2>            
+            <div class="form-group" ng-app="bpApp" ng-controller="BlueprintController as ctrl">
+                <md-content class="md-padding">
+                    <form ng-submit="$event.preventDefault()" id="formEntry" class="collapse form-horizontal in" method="post" action="@Url.Action("ParseItems", "Calculator")">
+                        <md-autocomplete flex
+                                         md-input-name="blueprintField"
+                                         md-selected-item="ctrl.selectedItem"
+                                         md-search-text="ctrl.searchText"
+                                         md-items="item in ctrl.findBlueprints(ctrl.searchText)"
+                                         md-item-text="item.TypeName"
+                                         md-delay="300"
+                                         md-floating-label="Add Blueprints"
+                                         md-selected-item-change="ctrl.addBlueprint(ctrl.selectedItem.TypeId)">
+                            <md-item-template>
+                                <span md-highlight-text="ctrl.searchText">{{item.TypeName}}</span>
+                            </md-item-template>
+                        </md-autocomplete>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="col-md-4">Compress Minerals?</label>
+                                <div class="col-md-8">
+                                    <input type="checkbox" ng-model="ctrl.compressMinerals" ng-change="ctrl.summarizeBlueprints()"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="col-md-8">
+                                    <md-autocomplete flex
+                                                     md-input-name="systemField"
+                                                     md-selected-item="ctrl.mfgSystem"
+                                                     md-search-text="ctrl.mfgSystemSearch"
+                                                     md-items="item in ctrl.findSystems(ctrl.mfgSystemSearch)"
+                                                     md-item-text="item.SystemName"
+                                                     md-delay="300"
+                                                     md-floating-label="Select Mfg System"
+                                                     md-selected-item-change="ctrl.updateSystemRates()">
+                                        <md-item-template>
+                                            <span md-highlight-text="ctrl.searchText">{{item.SystemName}}</span>
+                                        </md-item-template>
+                                    </md-autocomplete>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <ul class="inline-tabs nav-pills">
+                            <li ng-repeat="bp in ctrl.selectedBlueprints">
+                                <a href="#type-{{bp.TypeId}}" data-toggle="tab">{{bp.TypeName}}</a>
+                            </li>
+                            <li ng-show="ctrl.selectedBlueprints.length"><a href="#summary" data-toggle="tab" ng-click="ctrl.summarizeBlueprints()">Summary</a></li>
+                        </ul>
+
+                        <div class="tab-content clearfix">
+                            <div class="tab-pane" id="type-{{bp.TypeId}}" ng-repeat="bp in ctrl.selectedBlueprints">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h2>{{bp.TypeName}}</h2>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="col-md-4">Runs</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" ng-change="ctrl.refreshMaterials(bp)" type="number" min="1" ng-model="bp.Qty" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="col-md-4">ME</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" ng-change="ctrl.refreshMaterials(bp)" type="number" min="0" max="10" ng-model="bp.MaterialEfficiency" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="col-md-4">Build Components</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" ng-change="ctrl.refreshMaterials(bp)" type="checkbox" ng-model="bp.BuildComponents" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>Component</h3>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h3>Base Qty</h3>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h3>Req'd Qty</h3>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h3>ME</h3>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h3>TE</h3>
+                                    </div>
+                                </div>
+
+                                <div class="row component-list"
+                                     ng-repeat="material in bp.Materials"
+                                     ng-include="'componentTree'"
+                                     ng-init="tabs=0;parent=bp"
+                                     ng-class-odd="'striped'">
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="summary">
+                                <div class="col-md-12">
+                                    <h2>Materials</h2>
+                                    <table class="table">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Quantity</th>
+                                            <th>Volume</th>
+                                            <th>Cost</th>
+                                        </tr>
+                                        <tr ng-repeat="mat in ctrl.materialList">
+                                            <td>{{mat.TypeName}}</td>
+                                            <td>{{mat.Qty | number:0}}</td>
+                                            <td>{{(mat.Volume * mat.Qty) | number:0}} m<sup>3</sup></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <th></th>
+                                        </tr>
+                                    </table>
+
+                                    <h2>Blueprints</h2>
+                                    <table class="table">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Runs</th>
+                                        </tr>
+                                        <tr ng-repeat="bpc in ctrl.bpcList | orderObjectBy:'TypeName'">
+                                            <td>{{bpc.TypeName}}</td>
+                                            <td>{{bpc.Qty | number:0}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <script type="text/ng-template" id="componentTree">
+                            <div ng-init="parentMat=material" class="col col-md-4" style="padding-left:{{10+tabs*5}}px">
+                                <input type="checkbox" ng-show="parent.BuildComponents&&material.Materials.length" ng-model="material.BuildComponents" />
+                                {{material.TypeName}}
+                            </div>
+                            <div class="col col-md-3" style="padding-left:{{10+tabs*5}}px">
+                                {{material.TotalQty | number:0}}
+                            </div>
+                            <div class="col col-md-3" style="padding-left:{{10+tabs*5}}px">
+                                {{material.ReducedQty | number:0}}
+                            </div>
+                            <div class="col col-md-1">
+                                <input class="form-control" ng-show="parent.BuildComponents&&material.BuildComponents&&material.Materials.length" ng-change="ctrl.refreshMaterials(material)" type="number" min="0" max="10" ng-model="material.MaterialEfficiency" />
+                            </div>
+                            <div class="col col-md-1">
+                                <input class="form-control" ng-show="parent.BuildComponents&&material.BuildComponents&&material.Materials.length" ng-change="ctrl.refreshMaterials(material)" type="number" min="0" max="20" ng-model="material.TimeEfficiency" />
+                            </div>
+                            <div ng-show="parent.BuildComponents"
+                                 ng-repeat="material in material.Materials"
+                                 ng-include="'componentTree'"
+                                 ng-init="tabs=tabs+1;parent=parentMat">
+
+                            </div>
+                            <div class="clearfix"></div>
+                        
+                        </script>
+                    </form>
+                </md-content>
+            </div>
+        </div>
+    </div>
+</section>

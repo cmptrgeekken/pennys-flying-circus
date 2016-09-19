@@ -531,6 +531,11 @@ namespace EveMarket.Core.Repositories.Eve
                 .WithMany(s => s.stations)
                 .HasForeignKey(s => s.regionID);
 
+            modelBuilder.Entity<staStation>()
+                .HasRequired(s => s.staOperation)
+                .WithMany(o => o.stations)
+                .HasForeignKey(s => s.operationID);
+
             modelBuilder.Entity<translationTable>()
                 .Property(e => e.sourceTable)
                 .IsUnicode(false);

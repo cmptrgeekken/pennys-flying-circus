@@ -39,5 +39,7 @@ namespace EveMarket.Core.Repositories.Eve
         public long? gallenteStationTypeID { get; set; }
 
         public long? joveStationTypeID { get; set; }
+
+        public ICollection<staStation> stations { get; set; }
     }
 }

@@ -160,6 +160,9 @@
     <Compile Include="Enums\MineralType.cs" />
     <Compile Include="Enums\ReprocessingType.cs" />
     <Compile Include="Models\AdjustedMarketOrder.cs" />
+    <Compile Include="Models\Blueprint.cs" />
+    <Compile Include="Models\BlueprintSkill.cs" />
+    <Compile Include="Models\BlueprintMaterial.cs" />
     <Compile Include="Models\MarketItem.cs" />
     <Compile Include="Models\CrestApi\CrestMarketOrder.cs" />
     <Compile Include="Models\CrestApi\CrestMarketOrderList.cs" />

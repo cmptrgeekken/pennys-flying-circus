@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using EveMarket.Core.Enums;
 using EveMarket.Core.Models;
 using EveMarket.Core.Repositories.Eve;
 
@@ -14,5 +16,8 @@ namespace EveMarket.Core.Services.Interfaces
         void RefreshMarketOrders(long regionId);
         invType GetItem(string itemName);
         OrderSummary GetItemPricing(List<ItemLookup> itemList);
+        IEnumerable<Blueprint> GetBlueprints(string name);
+        Blueprint GetBlueprint(int typeId, IndustryActivityType activityType);
+        IEnumerable<mapSolarSystem> GetSystems(string prefix);
     }
 }

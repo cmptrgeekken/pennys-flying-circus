@@ -34,3 +34,12 @@ tr:nth-child(odd).market-order-buy>td, .table-striped>tbody>tr:nth-child(odd).ma
 .bg-19 {
     background-image: url(../img/shots/orca-boost.png);
 }
+
+.component-list .col {
+    height: 35px;
+    padding: 10px;
+}
+
+.component-list.striped {
+    background-color: #CCC;
+}
