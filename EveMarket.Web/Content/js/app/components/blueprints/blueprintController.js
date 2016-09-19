@@ -45,24 +45,28 @@
         function updateSystemRates() {
             $http.get('http://api.eve-industry.org/system-cost-index.xml', { params: { name: self.mfgSystem.SystemName } })
                 .then(function (response) {
-                    var dom;
-                    if (typeof DOMParser != "undefined") {
-                        var parser = new DOMParser();
-                        dom = parser.parseFromString(response.data, "text/xml");
-                    }
-                    else {
-                        var doc = new ActiveXObject("Microsoft.XMLDOM");
-                        doc.async = false;
-                        dom = doc.loadXML(response.data);
-                    }
+                    var dom = parseXml(response.data);
                     var activities = dom.getElementsByTagName('activity');
                     for (var i = 0; i < activities.length; i++) {
                         var activity = activities[i];
                         self.stationActivities[activity.getAttribute("name")] = parseFloat(activity.innerHTML);
                     }
-
-                    console.log(self.stationActivities);
                 });
+        }
+
+        function parseXml(xml) {
+            var dom;
+            if (typeof DOMParser != "undefined") {
+                var parser = new DOMParser();
+                dom = parser.parseFromString(xml, "text/xml");
+            }
+            else {
+                var doc = new ActiveXObject("Microsoft.XMLDOM");
+                doc.async = false;
+                dom = doc.loadXML(xml);
+            }
+
+            return dom;
         }
 
         function refreshMaterials(mat) {
@@ -100,7 +104,34 @@
                 summarizeMaterials(bp);
             }
 
-            calculatePricing();
+            calculateJobBaseCosts();
+
+            //calculatePricing();
+        }
+
+        function calculateJobBaseCosts() {
+            var names = "";
+            for (var name in self.bpcList) {
+                if (!self.bpcList.hasOwnProperty(name)) continue;
+
+                if (names) names += ",";
+
+                names += name;
+            }
+
+            $http.get('http://api.eve-industry.org/job-base-cost.xml', { params: { names: names } })
+                .then(function (response) {
+                    var dom = parseXml(response.data);
+                    var costs = dom.getElementsByTagName('job-base-cost');
+                    for (var i = 0; i < costs.length; i++) {
+                        var cost = costs[i];
+                        var name = cost.getAttribute("name").replace(" Blueprint", "");
+                        self.bpcList[name].JobCost = parseFloat(cost.innerHTML)
+                            * self.stationActivities["Manufacturing"]
+                            * self.bpcList[name].Qty;
+                    }
+                    
+                });
         }
 
         function calculatePricing() {

@@ -150,10 +150,12 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Runs</th>
+                                            <th>Install Cost</th>
                                         </tr>
                                         <tr ng-repeat="bpc in ctrl.bpcList | orderObjectBy:'TypeName'">
                                             <td>{{bpc.TypeName}}</td>
                                             <td>{{bpc.Qty | number:0}}</td>
+                                            <td>{{bpc.JobCost | number:0.00}}</td>
                                         </tr>
                                     </table>
                                 </div>
