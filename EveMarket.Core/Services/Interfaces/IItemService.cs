@@ -19,5 +19,7 @@ namespace EveMarket.Core.Services.Interfaces
         IEnumerable<Blueprint> GetBlueprints(string name);
         Blueprint GetBlueprint(int typeId, IndustryActivityType activityType);
         IEnumerable<mapSolarSystem> GetSystems(string prefix);
+        IEnumerable<staStation> GetStations(int systemId, string prefix);
+        invType GetItem(long itemId);
     }
 }

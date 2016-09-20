@@ -241,6 +241,11 @@ namespace EveMarket.Core.Services
             return _eveDb.invTypes.SingleOrDefault(i => i.typeName == itemName);
         }
 
+        public invType GetItem(long itemId)
+        {
+            return _eveDb.invTypes.SingleOrDefault(i => i.typeID == itemId);
+        }
+
         public IEnumerable<Blueprint> GetBlueprints(string name)
         {
             name = name.ToLowerInvariant();
@@ -312,6 +317,15 @@ namespace EveMarket.Core.Services
             var systems = _eveDb.mapSolarSystems.Where(s => s.solarSystemName.ToLower().StartsWith(prefix));
 
             return systems.ToList();
+        }
+
+        public IEnumerable<staStation> GetStations(int systemId, string prefix)
+        {
+            prefix = prefix.ToLowerInvariant();
+            var stations =
+                _eveDb.staStations.Where(s => s.solarSystemID == systemId && s.stationName.ToLower().StartsWith(prefix));
+
+            return stations.ToList();
         }
 
         public OrderSummary GetItemPricing(List<ItemLookup> itemList)

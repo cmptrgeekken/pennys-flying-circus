@@ -19,28 +19,8 @@
             <div class="form-group" ng-app="bpApp" ng-controller="BlueprintController as ctrl">
                 <md-content class="md-padding">
                     <form ng-submit="$event.preventDefault()" id="formEntry" class="collapse form-horizontal in" method="post" action="@Url.Action("ParseItems", "Calculator")">
-                        <md-autocomplete flex
-                                         md-input-name="blueprintField"
-                                         md-selected-item="ctrl.selectedItem"
-                                         md-search-text="ctrl.searchText"
-                                         md-items="item in ctrl.findBlueprints(ctrl.searchText)"
-                                         md-item-text="item.TypeName"
-                                         md-delay="300"
-                                         md-floating-label="Add Blueprints"
-                                         md-selected-item-change="ctrl.addBlueprint(ctrl.selectedItem.TypeId)">
-                            <md-item-template>
-                                <span md-highlight-text="ctrl.searchText">{{item.TypeName}}</span>
-                            </md-item-template>
-                        </md-autocomplete>
-
                         <div class="row">
-                            <div class="col-md-4">
-                                <label class="col-md-4">Compress Minerals?</label>
-                                <div class="col-md-8">
-                                    <input type="checkbox" ng-model="ctrl.compressMinerals" ng-change="ctrl.summarizeBlueprints()"/>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="col-md-8">
                                     <md-autocomplete flex
                                                      md-input-name="systemField"
@@ -52,17 +32,75 @@
                                                      md-floating-label="Select Mfg System"
                                                      md-selected-item-change="ctrl.updateSystemRates()">
                                         <md-item-template>
-                                            <span md-highlight-text="ctrl.searchText">{{item.SystemName}}</span>
+                                            <span md-highlight-text="ctrl.mfgSystemSearch">{{item.SystemName}}</span>
                                         </md-item-template>
                                     </md-autocomplete>
                                 </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="col-md-8">
+                                    <md-autocomplete flex
+                                                     md-input-name="importSystemField"
+                                                     md-selected-item="ctrl.importSystem"
+                                                     md-search-text="ctrl.importSystemSearch"
+                                                     md-items="item in ctrl.findSystems(ctrl.importSystemSearch)"
+                                                     md-item-text="item.SystemName"
+                                                     md-delay="300"
+                                                     md-floating-label="Select Import System"
+                                                     md-selected-item-change="ctrl.importStation=null;ctrl.summarizeBlueprints()">
+                                        <md-item-template>
+                                            <span md-highlight-text="ctrl.importSystemSearch">{{item.SystemName}}</span>
+                                        </md-item-template>
+                                    </md-autocomplete>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="col-md-8">
+                                    <md-autocomplete flex
+                                                     md-input-name="importStationField"
+                                                     md-selected-item="ctrl.importStation"
+                                                     md-search-text="ctrl.importStationSearch"
+                                                     md-items="item in ctrl.findStations(ctrl.importSystem.SystemId, ctrl.importStationSearch)"
+                                                     md-item-text="item.StationName"
+                                                     md-delay="300"
+                                                     md-floating-label="Select Import Station"
+                                                     md-selected-item-change=""
+                                                     ng-show="ctrl.importSystem">
+                                        <md-item-template>
+                                            <span md-highlight-text="ctrl.importStationSearch">{{item.StationName}}</span>
+                                        </md-item-template>
+                                    </md-autocomplete>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-md-4">Compress Minerals?</label>
+                                <div class="col-md-8">
+                                    <input type="checkbox" ng-model="ctrl.compressMinerals" ng-change="ctrl.summarizeBlueprints()"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <md-autocomplete flex
+                                                 md-input-name="blueprintField"
+                                                 md-selected-item="ctrl.selectedItem"
+                                                 md-search-text="ctrl.searchText"
+                                                 md-items="item in ctrl.findBlueprints(ctrl.searchText)"
+                                                 md-item-text="item.TypeName"
+                                                 md-delay="300"
+                                                 md-floating-label="Add Blueprints"
+                                                 md-selected-item-change="ctrl.addBlueprint(ctrl.selectedItem.TypeId)">
+                                    <md-item-template>
+                                        <span md-highlight-text="ctrl.searchText">{{item.TypeName}}</span>
+                                    </md-item-template>
+                                </md-autocomplete>
                             </div>
                         </div>
 
 
                         <ul class="inline-tabs nav-pills">
                             <li ng-repeat="bp in ctrl.selectedBlueprints">
-                                <a href="#type-{{bp.TypeId}}" data-toggle="tab">{{bp.TypeName}}</a>
+                                <a href="#type-{{bp.TypeId}}" data-toggle="tab">{{bp.TypeName}} ({{bp.Qty}})</a>
                             </li>
                             <li ng-show="ctrl.selectedBlueprints.length"><a href="#summary" data-toggle="tab" ng-click="ctrl.summarizeBlueprints()">Summary</a></li>
                         </ul>
@@ -77,7 +115,7 @@
                                         <div class="form-group">
                                             <label class="col-md-4">Runs</label>
                                             <div class="col-md-6">
-                                                <input class="form-control" ng-change="ctrl.refreshMaterials(bp)" type="number" min="1" ng-model="bp.Qty" />
+                                                <input class="form-control" ng-change="ctrl.refreshMaterials(bp)" type="number" min="0" ng-model="bp.Qty" />
                                             </div>
                                         </div>
                                     </div>
@@ -93,7 +131,15 @@
                                         <div class="form-group">
                                             <label class="col-md-4">Build Components</label>
                                             <div class="col-md-6">
-                                                <input class="form-control" ng-change="ctrl.refreshMaterials(bp)" type="checkbox" ng-model="bp.BuildComponents" />
+                                                <input class="form-control" ng-change="ctrl.refreshMaterials(bp)" type="checkbox" ng-model="bp.BuildComponents"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="col-md-5">BPC Pack Cost</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" type="text" ng-change="ctrl.refreshMaterials(bp)" ng-model="bp.BpcPackCost" />
                                             </div>
                                         </div>
                                     </div>
@@ -126,6 +172,36 @@
                             </div>
                             <div class="tab-pane" id="summary">
                                 <div class="col-md-12">
+                                    <h2>Costs</h2>
+                                    <table class="table">
+                                        <tr>
+                                            <th>Blueprint</th>
+                                            <th>Quantity</th>
+                                            <th>Cost Ea</th>
+                                            <th>10%</th>
+                                            <th>20%</th>
+                                            <th>30%</th>
+                                        </tr>
+                                        <tbody>
+                                        <tr ng-repeat="bp in ctrl.selectedBlueprints">
+                                            <td>{{bp.TypeName}}</td>
+                                            <td>{{bp.Qty}}</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        </tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <th>Total</th>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
                                     <h2>Materials</h2>
                                     <table class="table">
                                         <tr>
@@ -138,10 +214,13 @@
                                             <td>{{mat.TypeName}}</td>
                                             <td>{{mat.Qty | number:0}}</td>
                                             <td>{{(mat.Volume * mat.Qty) | number:0}} m<sup>3</sup></td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td></td>
                                             <th></th>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                     </table>
 

@@ -29,8 +29,24 @@
         self.bpcList = {};
         self.stationActivities = {};
 
+        self.mfgSystem = {
+            SystemId: 30002019,
+            SystemName: "F-NMX6"
+        };
+
+        self.importSystem = {
+            SystemId: 30000142,
+            SystemName: "Jita"
+        };
+
+        self.importStation = {
+            StationId: 60003760,
+            StationName: "Jita IV - Moon 4 - Caldari Navy Assembly Plant"
+        }
+
         self.findBlueprints = findBlueprints;
         self.findSystems = findSystems;
+        self.findStations = findStations;
         self.updateSystemRates = updateSystemRates;
         self.addBlueprint = addBlueprint;
         self.calcTabs = printTabs;
@@ -56,7 +72,7 @@
 
         function parseXml(xml) {
             var dom;
-            if (typeof DOMParser != "undefined") {
+            if (typeof DOMParser !== "undefined") {
                 var parser = new DOMParser();
                 dom = parser.parseFromString(xml, "text/xml");
             }
@@ -70,8 +86,8 @@
         }
 
         function refreshMaterials(mat) {
-            var reducedQty = mat.ReducedQty || mat.Qty;
-            var ttlQty = mat.TotalQty || mat.Qty;
+            var reducedQty = isNaN(mat.ReducedQty) ? mat.Qty : mat.ReducedQty;
+            var ttlQty = isNaN(mat.TotalQty) ? mat.Qty : mat.TtlQty;
             var me = mat.MaterialEfficiency;
             var materials = mat.Materials;
 
@@ -130,7 +146,6 @@
                             * self.stationActivities["Manufacturing"]
                             * self.bpcList[name].Qty;
                     }
-                    
                 });
         }
 
@@ -154,7 +169,6 @@
         };
 
         function summarizeMaterials(material) {
-
             for (var j = 0; j < material.Materials.length; j++) {
                 var mat = material.Materials[j];
                 var matName = mat.TypeName;
@@ -203,6 +217,13 @@
         function findSystems(query) {
             return $http.get('/Calculator/GetSystems', { params: { prefix: query } })
                 .then(function(response) {
+                    return response.data;
+                });
+        }
+
+        function findStations(systemId, query) {
+            return $http.get('/Calculator/GetStations', { params: { systemId: systemId, prefix: query } })
+                .then(function (response) {
                     return response.data;
                 });
         }

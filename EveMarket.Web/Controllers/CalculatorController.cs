@@ -46,6 +46,19 @@ namespace EveMarket.Web.Controllers
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetStations(int systemId, string prefix)
+        {
+            var stations = _itemService.GetStations(systemId, prefix);
+
+            var viewModel = stations.Select(s => new
+            {
+                StationId = s.stationID,
+                StationName = s.stationName,
+            });
+
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetBlueprints(string prefix)
         {
             var bps = _itemService.GetBlueprints(prefix);
@@ -93,6 +106,28 @@ namespace EveMarket.Web.Controllers
             }
 
             return View(viewModel);
+        }
+
+        public JsonResult GetMaterialCosts(IEnumerable<ItemLookupViewModel> materials, long stationId, bool compressOres)
+        {
+
+            var itemList = new List<ItemLookup>();
+            var mineralList = new MineralList();
+            var mineralNames = mineralList.GetMineralNames().ToList();
+            foreach (var material in materials)
+            {
+                var item = _itemService.GetItem(material.TypeId);
+                if (compressOres && mineralNames.Contains(item.typeName))
+                {
+
+                }
+                else
+                {
+                    
+                }
+            }
+
+            return Json("");
         }
 
         [HttpPost]
