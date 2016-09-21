@@ -350,10 +350,16 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BlueprintCalculationResultsViewModel.cs" />
+    <Compile Include="Models\BlueprintCalculationViewModel.cs" />
+    <Compile Include="Models\BlueprintLookupViewModel.cs" />
+    <Compile Include="Models\BlueprintMaterialViewModel.cs" />
+    <Compile Include="Models\BlueprintViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ItemLookupViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\OreListModel.cs" />
+    <Compile Include="Models\SkillLevelViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

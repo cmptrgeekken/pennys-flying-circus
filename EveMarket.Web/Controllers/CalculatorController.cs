@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using eZet.EveLib.EveAuthModule;
 using EveMarket.Core.Enums;
+using EveMarket.Core.Extensions;
 using EveMarket.Core.Repositories.Eve;
 using EveMarket.Core.Services;
 using EveMarket.Core.Services.Interfaces;
@@ -108,26 +109,101 @@ namespace EveMarket.Web.Controllers
             return View(viewModel);
         }
 
-        public JsonResult GetMaterialCosts(IEnumerable<ItemLookupViewModel> materials, long stationId, bool compressOres)
+        public JsonResult GetMaterialCosts(BlueprintCalculationViewModel viewModel)
         {
 
-            var itemList = new List<ItemLookup>();
             var mineralList = new MineralList();
             var mineralNames = mineralList.GetMineralNames().ToList();
-            foreach (var material in materials)
-            {
-                var item = _itemService.GetItem(material.TypeId);
-                if (compressOres && mineralNames.Contains(item.typeName))
-                {
 
-                }
-                else
+            var oreList = new Dictionary<long, ItemLookup>();
+            var itemList = new Dictionary<long,ItemLookup>();
+            var blueprints = new Dictionary<long, BlueprintLookupViewModel>();
+            foreach (var bp in viewModel.Blueprints)
+            {
+                var bpMaterials = bp.Materials.SelectMany(m => m.FlattenHierarchy(h => h.Materials));
+                foreach (var material in bpMaterials)
                 {
-                    
+                    if (!material.BuildComponents)
+                    {
+                        var item = _itemService.GetItem(material.TypeId);
+                        if (viewModel.CompressMinerals && mineralNames.Contains(item.typeName))
+                        {
+                            mineralList[item.typeName] += material.Qty;
+                        }
+                        else
+                        {
+                            if (!itemList.ContainsKey(material.TypeId))
+                            {
+                                itemList.Add(material.TypeId, new ItemLookup
+                                {
+                                    TypeId = material.TypeId,
+                                    Qty = 0
+                                });
+                            }
+
+                            itemList[material.TypeId].Qty += material.Qty;
+                        }
+                    }
+                    else
+                    {
+                        if (!blueprints.ContainsKey(material.TypeId))
+                        {
+                            blueprints.Add(material.TypeId, new BlueprintLookupViewModel()
+                            {
+                                TypeId = material.TypeId,
+                                JobCost = material.JobBaseCost * viewModel.MfgSystemCostIndex,
+                            });
+                        }
+
+                        blueprints[material.TypeId].Qty += material.Qty;
+                    }
+                }
+
+                if (!blueprints.ContainsKey(bp.TypeId))
+                {
+                    blueprints.Add(bp.TypeId, new BlueprintLookupViewModel
+                    {
+                        TypeId = bp.TypeId,
+                        JobCost = bp.JobBaseCost * viewModel.MfgSystemCostIndex,
+                    });
+                }
+
+                blueprints[bp.TypeId].Qty += bp.Qty;
+            }
+
+            var skills = _playerService.GetReprocessingSkills();
+            if (mineralList.TotalVolume > 0)
+            {
+                var compressedOres = _itemService.GetCompressedOres(skills, mineralList);
+                foreach (var ore in compressedOres.MarketItems)
+                {
+                    oreList.Add(ore.Id, new ItemLookup
+                    {
+                        TypeId = ore.Id,
+                        Qty = (int)ore.Qty,
+                    });
                 }
             }
 
-            return Json("");
+            OrderSummary oreSummary = null;
+            OrderSummary orderSummary = null;
+
+            if (oreList.Any())
+            {
+                oreSummary = _itemService.GetItemPricing(oreList.Values.ToList());
+            }
+
+            if (itemList.Any())
+            {
+                orderSummary = _itemService.GetItemPricing(itemList.Values.ToList());
+            }
+
+            return Json(new BlueprintCalculationResultsViewModel
+            {
+                OreSummary = oreSummary,
+                OrderSummary = orderSummary,
+                BlueprintSummary = blueprints.Values.ToList(),
+            });
         }
 
         [HttpPost]
