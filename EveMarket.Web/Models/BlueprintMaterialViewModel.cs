@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace EveMarket.Web.Models
 {
@@ -9,7 +6,6 @@ namespace EveMarket.Web.Models
     {
         public long TypeId { get; set; }
         public int Qty { get; set; }
-        public decimal? UnitPrice { get; set; }
         public int MaterialEfficiency { get; set; }
         public int TimeEfficiency { get; set; }
         public bool BuildComponents { get; set; }

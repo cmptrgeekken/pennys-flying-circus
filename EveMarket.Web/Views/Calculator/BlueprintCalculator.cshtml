@@ -171,73 +171,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="summary">
-                                <div class="col-md-12">
-                                    <h2>Costs</h2>
-                                    <table class="table">
-                                        <tr>
-                                            <th>Blueprint</th>
-                                            <th>Quantity</th>
-                                            <th>Cost Ea</th>
-                                            <th>10%</th>
-                                            <th>20%</th>
-                                            <th>30%</th>
-                                        </tr>
-                                        <tbody>
-                                        <tr ng-repeat="bp in ctrl.selectedBlueprints">
-                                            <td>{{bp.TypeName}}</td>
-                                            <td>{{bp.Qty}}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        </tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <th>Total</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    </table>
-                                    <h2>Materials</h2>
-                                    <table class="table">
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Quantity</th>
-                                            <th>Volume</th>
-                                            <th>Cost</th>
-                                        </tr>
-                                        <tr ng-repeat="mat in ctrl.materialList">
-                                            <td>{{mat.TypeName}}</td>
-                                            <td>{{mat.Qty | number:0}}</td>
-                                            <td>{{(mat.Volume * mat.Qty) | number:0}} m<sup>3</sup></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <th></th>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    </table>
-
-                                    <h2>Blueprints</h2>
-                                    <table class="table">
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Runs</th>
-                                            <th>Install Cost</th>
-                                        </tr>
-                                        <tr ng-repeat="bpc in ctrl.bpcList | orderObjectBy:'TypeName'">
-                                            <td>{{bpc.TypeName}}</td>
-                                            <td>{{bpc.Qty | number:0}}</td>
-                                            <td>{{bpc.JobCost | number:0.00}}</td>
-                                        </tr>
-                                    </table>
-                                </div>
+                                
                             </div>
                         </div>
                         <script type="text/ng-template" id="componentTree">

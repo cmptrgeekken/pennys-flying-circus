@@ -189,22 +189,13 @@ namespace EveMarket.Core.Services
 
             var perfectPurchasePrice = itemList.Sum(o => Math.Round(o.Pricing.CalculateBestTotal((int)Math.Ceiling(o.Qty)), 2));
             var buyAllPurchasePrice = itemList.Sum(o => o.TotalPrice);
-            
-            var totalOreVolume = (decimal)itemList.Sum(o => o.Qty*o.Volume);
-            // TODO: Make shipping cost configurable
-            var sourceStagingShippingCost = totalOreVolume*300 + perfectPurchasePrice*.02m;
-            var stagingRefineryShippingCost = 0;//totalOreVolume*100;
-            var refiningCost = 0;//totalOreVolume*10;
-            var refineryStationShippingCost = 0;//totalMineralVolume*5;
-            // TODO: Make desired profit configurable
-            var profitSell = buyAllPurchasePrice*1.0m;
 
-            var predictedSell = profitSell + sourceStagingShippingCost;
-            var predictedProfit = predictedSell - buyAllPurchasePrice - sourceStagingShippingCost;
+            var totalOreVolume = (decimal) itemList.Sum(o => o.Volume*o.Qty);
+            var sourceStagingShippingCost = itemList.Sum(o => o.AverageShippingCost*(decimal) o.Qty);
 
             var mineralBuyAllPurchasePrice = minerals?.Sum(m => m.TotalPrice);
             var totalMineralVolume = minerals?.Sum(m => m.Volume * m.DesiredQty);
-            var mineralValueRatio = predictedSell/mineralBuyAllPurchasePrice;
+            var mineralValueRatio = (buyAllPurchasePrice + sourceStagingShippingCost) / mineralBuyAllPurchasePrice;
 
             if (minerals != null)
             {
@@ -215,7 +206,6 @@ namespace EveMarket.Core.Services
                     mineral.ComparisonPrice = Math.Round(mineral.ComparisonTotal / (decimal)mineral.DesiredQty, 2);
                 }
             }
-            
 
             return new OrderSummary
             {
@@ -227,12 +217,6 @@ namespace EveMarket.Core.Services
                 PurchaseCost = buyAllPurchasePrice,
                 TotalVolume = totalOreVolume,
                 SourceStagingShippingCost = sourceStagingShippingCost,
-                StagingRefineryShippingCost = stagingRefineryShippingCost,
-                RefiningCost = refiningCost,
-                RefineryStationShippingCost = refineryStationShippingCost,
-                ProfitSell = profitSell,
-                PredictedSell = predictedSell,
-                PredictedProfit = predictedProfit,
             };
         }
 
@@ -328,8 +312,11 @@ namespace EveMarket.Core.Services
             return stations.ToList();
         }
 
-        public OrderSummary GetItemPricing(List<ItemLookup> itemList)
+        public OrderSummary GetItemPricing(List<ItemLookup> itemList, decimal iskPerM3, decimal collateralPct, long stationId)
         {
+            var station = _eveDb.staStations.Single(s => s.stationID == stationId);
+            var regionId = station.regionID.Value;
+
             var items = itemList
                 .Select(il => _eveDb.invTypes.SingleOrDefault(i => i.typeID == il.TypeId))
                 .Where(i => i != null)
@@ -338,7 +325,9 @@ namespace EveMarket.Core.Services
                     Id = i.typeID,
                     Name = i.typeName,
                     Volume = i.volume,
-                    Pricing = GetCurrentItemPricing(i.typeID),
+                    Pricing = GetCurrentItemPricing(i.typeID, regionId, new List<long> {stationId}),
+                    CollateralPct = collateralPct,
+                    IskPerM3 = iskPerM3,
                     Qty = itemList.First(il => il.TypeId == i.typeID).Qty,
                 });
             
@@ -367,8 +356,7 @@ namespace EveMarket.Core.Services
                     RegionId = regionId,
                     LastUpdated = regionOrders.LastUpdated,
                     MarketOrders = regionOrders.MarketOrders,
-                    // TODO Make station ID configurable
-                    AllowedStationIds = new List<long> { 60003760 },
+                    AllowedStationIds = stationIds ?? new List<long> { 60003760 },
                 };
 
                 return itemPricing;

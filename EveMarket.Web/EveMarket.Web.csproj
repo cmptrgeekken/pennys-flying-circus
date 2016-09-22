@@ -351,6 +351,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BlueprintCalculationResultsViewModel.cs" />
+    <Compile Include="Models\BlueprintCalculationResultViewModel.cs" />
     <Compile Include="Models\BlueprintCalculationViewModel.cs" />
     <Compile Include="Models\BlueprintLookupViewModel.cs" />
     <Compile Include="Models\BlueprintMaterialViewModel.cs" />
@@ -800,6 +801,7 @@
     <Content Include="Views\Calculator\_OrderSummary.cshtml" />
     <Content Include="Views\Calculator\BlueprintCalculator.cshtml" />
     <None Include="Views\Calculator\FittingsSelector.cshtml" />
+    <Content Include="Views\Calculator\GetBlueprintSummary.cshtml" />
     <None Include="Views\Errors\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>

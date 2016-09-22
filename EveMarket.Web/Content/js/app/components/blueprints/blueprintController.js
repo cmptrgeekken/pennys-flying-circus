@@ -53,13 +53,18 @@
         self.refreshMaterials = refreshMaterials;
         self.printTabs = printTabs;
         self.summarizeBlueprints = summarizeBlueprints;
+        
 
         self.selectedBlueprints = [];
+        self.baseCostCache = {};
 
         addBlueprint(24483);
+        updateSystemRates();
 
         function updateSystemRates() {
-            $http.get('http://api.eve-industry.org/system-cost-index.xml', { params: { name: self.mfgSystem.SystemName } })
+            if (!self.mfgSystem) return;
+
+            $http.get('https://api.eve-industry.org/system-cost-index.xml', { params: { name: self.mfgSystem.SystemName } })
                 .then(function (response) {
                     var dom = parseXml(response.data);
                     var activities = dom.getElementsByTagName('activity');
@@ -70,19 +75,99 @@
                 });
         }
 
-        function parseXml(xml) {
-            var dom;
-            if (typeof DOMParser !== "undefined") {
-                var parser = new DOMParser();
-                dom = parser.parseFromString(xml, "text/xml");
-            }
-            else {
-                var doc = new ActiveXObject("Microsoft.XMLDOM");
-                doc.async = false;
-                dom = doc.loadXML(xml);
+        function summarizeBlueprints() {
+            calculateJobBaseCosts()
+                .then(function() {
+                    var bpViewModel = {
+                        MfgSystemCostIndex: self.stationActivities["Manufacturing"],
+                        CompressMinerals: self.compressMinerals,
+                        PurchaseStationId: self.importStation.StationId,
+                        Blueprints: stripNonModelValues(self.selectedBlueprints)
+                    };
+
+                    fetchSummaryView(bpViewModel);
+                });
+        }
+
+        function stripNonModelValues(mats) {
+            var matList = [];
+
+            for (var i = 0; i < mats.length; i++) {
+                var mat = angular.copy(mats[i]);
+
+                if (mat["ReducedQty"]) {
+                    mat["Qty"] = mat["ReducedQty"];
+                }
+
+                delete mat["TypeName"];
+                delete mat["ReducedQty"];
+                delete mat["TotalQty"];
+                delete mat["Volume"];
+                delete mat["Skills"];
+
+                mat.Materials = stripNonModelValues(mat.Materials);
+
+                matList.push(mat);
             }
 
-            return dom;
+            return matList;
+        }
+
+        function calculateJobBaseCosts() {
+            var names = "";
+
+            var bpcs = {};
+
+            var gatherBpcs = function(mat) {
+                if (mat.Materials.length) {
+                    if (!bpcs[mat.TypeName]) bpcs[mat.TypeName] = [];
+
+                    bpcs[mat.TypeName].push(mat);
+
+                    for (var i = 0; i < mat.Materials.length; i++) {
+                        gatherBpcs(mat.Materials[i]);
+                    }
+                }
+            };
+
+            for (var i = 0; i < self.selectedBlueprints.length; i++) {
+                var bp = self.selectedBlueprints[i];
+
+                gatherBpcs(bp);
+            }
+
+            for (var name in bpcs) {
+                if (!bpcs.hasOwnProperty(name)) continue;
+
+                if (names) names+= ",";
+
+                names += name;
+            }
+
+            return $http.get('https://api.eve-industry.org/job-base-cost.xml', { params: { names: names } })
+                .then(function (response) {
+                    var dom = parseXml(response.data);
+                    var costs = dom.getElementsByTagName('job-base-cost');
+                    for (var i = 0; i < costs.length; i++) {
+                        var cost = costs[i];
+                        var name = cost.getAttribute("name").replace(" Blueprint", "");
+
+                        for (var j = 0; j < bpcs[name].length; j++) {
+                            bpcs[name][j].JobBaseCost = parseFloat(cost.innerHTML);
+                        };
+                    }
+                });
+        }
+
+        function addBlueprint(typeId) {
+            if (!typeId) return;
+
+            var bpDetails = getBlueprint(typeId);
+
+            bpDetails.then(function (d) {
+                refreshMaterials(d);
+                self.selectedBlueprints.push(d);
+            });
         }
 
         function refreshMaterials(mat) {
@@ -101,110 +186,15 @@
             }
         }
 
-        function summarizeBlueprints() {
-            var bps = self.selectedBlueprints;
-
-            self.bpcList = {};
-            self.materialList = {};
-
-            for (var i = 0; i < bps.length; i++) {
-                var bp = bps[i];
-
-                self.bpcList[bp.TypeName] =
-                {
-                    TypeId: bp.TypeId,
-                    TypeName: bp.TypeName,
-                    Qty: bp.Qty
-                };
-
-                summarizeMaterials(bp);
-            }
-
-            calculateJobBaseCosts();
-
-            //calculatePricing();
-        }
-
-        function calculateJobBaseCosts() {
-            var names = "";
-            for (var name in self.bpcList) {
-                if (!self.bpcList.hasOwnProperty(name)) continue;
-
-                if (names) names += ",";
-
-                names += name;
-            }
-
-            $http.get('http://api.eve-industry.org/job-base-cost.xml', { params: { names: names } })
-                .then(function (response) {
-                    var dom = parseXml(response.data);
-                    var costs = dom.getElementsByTagName('job-base-cost');
-                    for (var i = 0; i < costs.length; i++) {
-                        var cost = costs[i];
-                        var name = cost.getAttribute("name").replace(" Blueprint", "");
-                        self.bpcList[name].JobCost = parseFloat(cost.innerHTML)
-                            * self.stationActivities["Manufacturing"]
-                            * self.bpcList[name].Qty;
-                    }
-                });
-        }
-
-        function calculatePricing() {
-            var items = [];
-            for (var matName in self.materialList) {
-                if (!self.materialList.hasOwnProperty(matName)) continue;
-
-                var mat = self.materialList[matName];
-
-                items.push({
-                    TypeId: mat.TypeId,
-                    Qty: mat.Qty
-                });
-            }
-
-            $http.post('/Calculator/CalculatePricing', { params: { items: items } })
-                .then(function (response) {
-                    return response.data;
-                });
-        };
-
-        function summarizeMaterials(material) {
-            for (var j = 0; j < material.Materials.length; j++) {
-                var mat = material.Materials[j];
-                var matName = mat.TypeName;
-
-                var list = mat.BuildComponents ? self.bpcList : self.materialList;
-
-                if (!list[matName]) {
-                    list[matName] = {
-                        TypeId: mat.TypeId,
-                        TypeName: mat.TypeName,
-                        Volume: mat.Volume,
-                        Qty: 0
-                    };
-                }
-
-                list[matName].Qty += mat.ReducedQty;
-
-                if (mat.BuildComponents) {
-                    summarizeMaterials(mat);
-                }
-            }
-        }
-
-        function addBlueprint(typeId) {
-            if (!typeId) return;
-
-            var bpDetails = getBlueprint(typeId);
-
-            bpDetails.then(function (d) {
-                refreshMaterials(d);
-                self.selectedBlueprints.push(d);
-            });
-        }
-
         function printTabs(tabs) {
             return "&nbsp;&nbsp;".repeat(tabs*1);
+        }
+
+        function fetchSummaryView(viewModel) {
+            return $http.post('/Calculator/GetBlueprintSummary', { viewModel: viewModel })
+                .then(function(response) {
+                    $('#summary').html(response.data);
+                });
         }
 
         function findBlueprints(query) {
@@ -233,6 +223,21 @@
                 .then(function(response) {
                     return response.data;
                 });
+        }
+
+        function parseXml(xml) {
+            var dom;
+            if (typeof DOMParser !== "undefined") {
+                var parser = new DOMParser();
+                dom = parser.parseFromString(xml, "text/xml");
+            }
+            else {
+                var doc = new ActiveXObject("Microsoft.XMLDOM");
+                doc.async = false;
+                dom = doc.loadXML(xml);
+            }
+
+            return dom;
         }
 
     }

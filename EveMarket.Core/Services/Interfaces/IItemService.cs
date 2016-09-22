@@ -15,7 +15,7 @@ namespace EveMarket.Core.Services.Interfaces
         ItemPricing GetCurrentItemPricing(long typeId, long regionId = 10000002, IEnumerable<long> stationIds = null);
         void RefreshMarketOrders(long regionId);
         invType GetItem(string itemName);
-        OrderSummary GetItemPricing(List<ItemLookup> itemList);
+        OrderSummary GetItemPricing(List<ItemLookup> itemList, decimal iskPerM3, decimal collateralPct, long stationId);
         IEnumerable<Blueprint> GetBlueprints(string name);
         Blueprint GetBlueprint(int typeId, IndustryActivityType activityType);
         IEnumerable<mapSolarSystem> GetSystems(string prefix);

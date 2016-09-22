@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using EveMarket.Core.Models;
 using EveMarket.Web.Models;
 using System.Linq;
@@ -109,101 +110,185 @@ namespace EveMarket.Web.Controllers
             return View(viewModel);
         }
 
-        public JsonResult GetMaterialCosts(BlueprintCalculationViewModel viewModel)
+        public ActionResult GetBlueprintSummary(BlueprintCalculationViewModel viewModel)
         {
 
-            var mineralList = new MineralList();
-            var mineralNames = mineralList.GetMineralNames().ToList();
+            var bpLookup = new Dictionary<long, Dictionary<long, BlueprintLookupViewModel>>();
+            var materialLookup = new Dictionary<long, Dictionary<long, ItemLookupViewModel>>();
 
-            var oreList = new Dictionary<long, ItemLookup>();
-            var itemList = new Dictionary<long,ItemLookup>();
-            var blueprints = new Dictionary<long, BlueprintLookupViewModel>();
-            foreach (var bp in viewModel.Blueprints)
+            var blueprintList = new Dictionary<long, BlueprintLookupViewModel>();
+            var materialList = new Dictionary<long, ItemLookupViewModel>();
+
+            foreach (var blueprint in viewModel.Blueprints)
             {
-                var bpMaterials = bp.Materials.SelectMany(m => m.FlattenHierarchy(h => h.Materials));
-                foreach (var material in bpMaterials)
-                {
-                    if (!material.BuildComponents)
-                    {
-                        var item = _itemService.GetItem(material.TypeId);
-                        if (viewModel.CompressMinerals && mineralNames.Contains(item.typeName))
-                        {
-                            mineralList[item.typeName] += material.Qty;
-                        }
-                        else
-                        {
-                            if (!itemList.ContainsKey(material.TypeId))
-                            {
-                                itemList.Add(material.TypeId, new ItemLookup
-                                {
-                                    TypeId = material.TypeId,
-                                    Qty = 0
-                                });
-                            }
+                var bpMaterialList = new Dictionary<long, ItemLookupViewModel>();
+                var bpBlueprintList = new Dictionary<long, BlueprintLookupViewModel>();
 
-                            itemList[material.TypeId].Qty += material.Qty;
-                        }
+                GatherBlueprintMaterials(blueprint, viewModel.MfgSystemCostIndex, bpMaterialList, bpBlueprintList);
+                
+                foreach (var kvp in bpMaterialList)
+                {
+                    if (!materialList.ContainsKey(kvp.Key))
+                    {
+                        materialList.Add(kvp.Key, kvp.Value);
                     }
                     else
                     {
-                        if (!blueprints.ContainsKey(material.TypeId))
-                        {
-                            blueprints.Add(material.TypeId, new BlueprintLookupViewModel()
-                            {
-                                TypeId = material.TypeId,
-                                JobCost = material.JobBaseCost * viewModel.MfgSystemCostIndex,
-                            });
-                        }
-
-                        blueprints[material.TypeId].Qty += material.Qty;
+                        materialList[kvp.Key].Qty += kvp.Value.Qty;
                     }
                 }
 
-                if (!blueprints.ContainsKey(bp.TypeId))
+                foreach (var kvp in bpBlueprintList)
                 {
-                    blueprints.Add(bp.TypeId, new BlueprintLookupViewModel
+                    if (!blueprintList.ContainsKey(kvp.Key))
                     {
-                        TypeId = bp.TypeId,
-                        JobCost = bp.JobBaseCost * viewModel.MfgSystemCostIndex,
+                        blueprintList.Add(kvp.Key, kvp.Value);
+                    }
+                    else
+                    {
+                        blueprintList[kvp.Key].Qty += kvp.Value.Qty;
+                    }
+                }
+
+                bpLookup.Add(blueprint.TypeId, bpBlueprintList);
+                materialLookup.Add(blueprint.TypeId, bpMaterialList);
+            }
+
+            var mineralList = new MineralList();
+            var mineralNames = mineralList.GetMineralNames().ToList();
+            var itemList = new List<ItemLookup>();
+            foreach (var material in materialList.Values)
+            {
+                var item = _itemService.GetItem(material.TypeId);
+                if (viewModel.CompressMinerals && mineralNames.Contains(item.typeName))
+                {
+                    mineralList[item.typeName] += material.Qty;
+                }
+                else
+                {
+                    itemList.Add(new ItemLookup
+                    {
+                        TypeId = material.TypeId,
+                        Qty = material.Qty,
+                    });
+                }
+            }
+
+            var reprocessingSkills = _playerService.GetReprocessingSkills();
+            var compressedOreSummary = _itemService.GetCompressedOres(reprocessingSkills, mineralList);
+            var orderSummary = _itemService.GetItemPricing(itemList, 300, .02m, viewModel.PurchaseStationId);
+
+            var blueprintSummary = new BlueprintCalculationResultsViewModel();
+
+            foreach (var bp in viewModel.Blueprints)
+            {
+                var blueprintCostAnalysis = new BlueprintCalculationResultViewModel();
+
+                var matList = materialLookup[bp.TypeId];
+                var bpList = bpLookup[bp.TypeId];
+
+                var item = _itemService.GetItem(bp.TypeId);
+                blueprintCostAnalysis.TypeId = bp.TypeId;
+                blueprintCostAnalysis.TypeName = item.typeName;
+                blueprintCostAnalysis.Qty = bp.Qty;
+
+                foreach (var mineral in compressedOreSummary.Minerals)
+                {
+                    if (matList.ContainsKey(mineral.Id))
+                    {
+                        blueprintCostAnalysis.MaterialPrice += matList[mineral.Id].Qty*mineral.ComparisonPrice;
+                    }
+                }
+
+                foreach (var material in orderSummary.MarketItems)
+                {
+                    if (matList.ContainsKey(material.Id))
+                    {
+                        blueprintCostAnalysis.MaterialPrice += matList[material.Id].Qty*(material.AveragePrice + material.AverageShippingCost);
+                    }
+                }
+
+                foreach (var bpEntry in bpList.Values)
+                {
+                    blueprintCostAnalysis.BlueprintPrice += (decimal)(bpEntry.Qty*bpEntry.JobCost);
+                }
+
+                blueprintCostAnalysis.TotalPrice = blueprintCostAnalysis.BlueprintPrice +
+                                                   blueprintCostAnalysis.MaterialPrice;
+
+                blueprintSummary.BlueprintResults.Add(blueprintCostAnalysis);
+            }
+
+            blueprintSummary.BlueprintList = blueprintList.Values.ToList();
+
+
+
+            return PartialView(blueprintSummary);
+
+
+            //var skills = _playerService.GetReprocessingSkills();
+            //if (mineralList.TotalVolume > 0)
+            //{
+            //    var compressedOres = _itemService.GetCompressedOres(skills, mineralList);
+            //    foreach (var ore in compressedOres.MarketItems)
+            //    {
+            //        oreList.Add(ore.Id, new ItemLookup
+            //        {
+            //            TypeId = ore.Id,
+            //            Qty = (int)ore.Qty,
+            //        });
+            //    }
+            //}
+
+            //OrderSummary oreSummary = null;
+            //OrderSummary orderSummary = null;
+
+            //if (oreList.Any())
+            //{
+            //    oreSummary = _itemService.GetItemPricing(oreList.Values.ToList());
+            //}
+
+            //if (itemList.Any())
+            //{
+            //    orderSummary = _itemService.GetItemPricing(itemList.Values.ToList());
+            //}
+
+            return PartialView(viewModel);
+        }
+
+        private void GatherBlueprintMaterials(BlueprintMaterialViewModel material, double mfgSystemCostIndex, Dictionary<long, ItemLookupViewModel> materialList, Dictionary<long, BlueprintLookupViewModel> blueprintList)
+        {
+            if (material.BuildComponents && material.Materials.Any())
+            {
+                if (!blueprintList.ContainsKey(material.TypeId))
+                {
+                    blueprintList.Add(material.TypeId, new BlueprintLookupViewModel
+                    {
+                        TypeId = material.TypeId,
+                        JobCost = material.JobBaseCost * mfgSystemCostIndex
+                    });
+
+                    blueprintList[material.TypeId].Qty += material.Qty;
+                }
+
+                foreach (var subMaterial in material.Materials)
+                {
+                    GatherBlueprintMaterials(subMaterial, mfgSystemCostIndex, materialList, blueprintList);;
+                }
+            }
+            else
+            {
+                if (!materialList.ContainsKey(material.TypeId))
+                {
+                    materialList.Add(material.TypeId, new ItemLookupViewModel
+                    {
+                        TypeId = material.TypeId
                     });
                 }
 
-                blueprints[bp.TypeId].Qty += bp.Qty;
+                materialList[material.TypeId].Qty += material.Qty;
             }
 
-            var skills = _playerService.GetReprocessingSkills();
-            if (mineralList.TotalVolume > 0)
-            {
-                var compressedOres = _itemService.GetCompressedOres(skills, mineralList);
-                foreach (var ore in compressedOres.MarketItems)
-                {
-                    oreList.Add(ore.Id, new ItemLookup
-                    {
-                        TypeId = ore.Id,
-                        Qty = (int)ore.Qty,
-                    });
-                }
-            }
-
-            OrderSummary oreSummary = null;
-            OrderSummary orderSummary = null;
-
-            if (oreList.Any())
-            {
-                oreSummary = _itemService.GetItemPricing(oreList.Values.ToList());
-            }
-
-            if (itemList.Any())
-            {
-                orderSummary = _itemService.GetItemPricing(itemList.Values.ToList());
-            }
-
-            return Json(new BlueprintCalculationResultsViewModel
-            {
-                OreSummary = oreSummary,
-                OrderSummary = orderSummary,
-                BlueprintSummary = blueprints.Values.ToList(),
-            });
         }
 
         [HttpPost]
@@ -304,9 +389,9 @@ namespace EveMarket.Web.Controllers
             if (itemList.Any())
             {
 
-                viewModel.ItemOrderSummary = _itemService.GetItemPricing(itemList);
-                
-                
+                viewModel.ItemOrderSummary = _itemService.GetItemPricing(itemList, 300, .02m, 60003760);
+
+
             }
             viewModel.TextInput = textInput;
             viewModel.InvalidLines = invalidLines;
