@@ -356,6 +356,7 @@
     <Compile Include="Models\BlueprintLookupViewModel.cs" />
     <Compile Include="Models\BlueprintMaterialViewModel.cs" />
     <Compile Include="Models\BlueprintViewModel.cs" />
+    <Compile Include="Models\BpcResultsViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ItemLookupViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />

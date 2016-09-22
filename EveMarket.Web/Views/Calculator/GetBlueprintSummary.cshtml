@@ -16,7 +16,10 @@
             <tr>
                 <td>@blueprint.TypeName</td>
                 <td>@blueprint.Qty</td>
-                <td>@((blueprint.TotalPrice / blueprint.Qty).ToString("#,00.00")) ISK</td>
+                <td>@((blueprint.TotalPrice/blueprint.Qty).ToString("#,00.00")) ISK</td>
+                <td>@((blueprint.TotalPrice/blueprint.Qty*1.1m).ToString("#,00.00")) ISK</td>
+                <td>@((blueprint.TotalPrice/blueprint.Qty*1.2m).ToString("#,00.00")) ISK</td>
+                <td>@((blueprint.TotalPrice / blueprint.Qty*1.3m).ToString("#,00.00")) ISK</td>
             </tr>
         }
         </tbody>
@@ -24,8 +27,9 @@
             <td></td>
             <th>Total</th>
             <td>@Model.BlueprintResults.Sum(bp => bp.TotalPrice).ToString("#,00.00")</td>
-            <td></td>
-            <td></td>
+            <td>@Model.BlueprintResults.Sum(bp => bp.TotalPrice*1.1m).ToString("#,00.00")</td>
+            <td>@Model.BlueprintResults.Sum(bp => bp.TotalPrice*1.2m).ToString("#,00.00")</td>
+            <td>@Model.BlueprintResults.Sum(bp => bp.TotalPrice*1.3m).ToString("#,00.00")</td>
         </tr>
     </table>
     <h2>Materials</h2>
@@ -36,12 +40,15 @@
             <th>Volume</th>
             <th>Cost</th>
         </tr>
-        @*<tr ng-repeat="mat in ctrl.materialList">
-            <td>{{mat.TypeName}}</td>
-            <td>{{mat.Qty | number:0}}</td>
-            <td>{{(mat.Volume * mat.Qty) | number:0}} m<sup>3</sup></td>
-            <td></td>
-        </tr>*@
+        @foreach (var material in Model.OrderSummary.MarketItems.Union(Model.OreSummary.MarketItems))
+        {
+            <tr>
+                <td>@material.Name</td>
+                <td>@material.Qty.ToString("#,00")</td>
+                <td>@material.TotalVolume.ToString("#,00")</td>
+                <td>@material.TotalPrice.ToString("#,00.00")</td>
+            </tr>
+        }
         <tr>
             <td></td>
             <th></th>
@@ -55,12 +62,17 @@
         <tr>
             <th>Name</th>
             <th>Runs</th>
-            <th>Install Cost</th>
+            <th>Install Cost (ea)</th>
+            <th>Install Cost (total)</th>
         </tr>
-        @*<tr ng-repeat="bpc in ctrl.bpcList | orderObjectBy:'TypeName'">
-            <td>{{bpc.TypeName}}</td>
-            <td>{{bpc.Qty | number:0}}</td>
-            <td>{{bpc.JobCost | number:0.00}}</td>
-        </tr>*@
+        @foreach (var bpc in Model.BpcResults.Blueprints)
+        {
+            <tr>
+                <td>@bpc.Name</td>
+                <td>@bpc.Qty</td>
+                <td>@bpc.JobCost.ToString("#,00.00")</td>
+                <td>@((bpc.JobCost*bpc.Qty).ToString("#,00.00"))</td>
+            </tr>
+        }
     </table>
 </div>

@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-md-12">
             <h2>Blueprints</h2>            
-            <div class="form-group" ng-app="bpApp" ng-controller="BlueprintController as ctrl">
+            <div class="form-group" ng-app="bpApp" ng-controller="BlueprintController as ctrl" ng-cloak>
                 <md-content class="md-padding">
                     <form ng-submit="$event.preventDefault()" id="formEntry" class="collapse form-horizontal in" method="post" action="@Url.Action("ParseItems", "Calculator")">
                         <div class="row">

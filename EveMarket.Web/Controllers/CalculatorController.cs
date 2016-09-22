@@ -121,6 +121,8 @@ namespace EveMarket.Web.Controllers
 
             foreach (var blueprint in viewModel.Blueprints)
             {
+                if (blueprint.Qty <= 0) continue;
+
                 var bpMaterialList = new Dictionary<long, ItemLookupViewModel>();
                 var bpBlueprintList = new Dictionary<long, BlueprintLookupViewModel>();
 
@@ -174,11 +176,25 @@ namespace EveMarket.Web.Controllers
                 }
             }
 
+            foreach (var bpc in blueprintList.Values)
+            {
+                var item = _itemService.GetItem(bpc.TypeId);
+                bpc.Name = item.typeName;
+            }
+
             var reprocessingSkills = _playerService.GetReprocessingSkills();
             var compressedOreSummary = _itemService.GetCompressedOres(reprocessingSkills, mineralList);
             var orderSummary = _itemService.GetItemPricing(itemList, 300, .02m, viewModel.PurchaseStationId);
 
-            var blueprintSummary = new BlueprintCalculationResultsViewModel();
+            var blueprintSummary = new BlueprintCalculationResultsViewModel
+            {
+                OrderSummary = orderSummary,
+                OreSummary = compressedOreSummary,
+                BpcResults = new BpcResultsViewModel
+                {
+                    Blueprints = blueprintList.Values.ToList()
+                },
+            };
 
             foreach (var bp in viewModel.Blueprints)
             {
@@ -213,47 +229,16 @@ namespace EveMarket.Web.Controllers
                     blueprintCostAnalysis.BlueprintPrice += (decimal)(bpEntry.Qty*bpEntry.JobCost);
                 }
 
-                blueprintCostAnalysis.TotalPrice = blueprintCostAnalysis.BlueprintPrice +
-                                                   blueprintCostAnalysis.MaterialPrice;
+                blueprintCostAnalysis.TotalPrice = blueprintCostAnalysis.BlueprintPrice
+                                                   + blueprintCostAnalysis.MaterialPrice
+                                                   + bp.BpcPackCost;
 
                 blueprintSummary.BlueprintResults.Add(blueprintCostAnalysis);
             }
 
-            blueprintSummary.BlueprintList = blueprintList.Values.ToList();
-
 
 
             return PartialView(blueprintSummary);
-
-
-            //var skills = _playerService.GetReprocessingSkills();
-            //if (mineralList.TotalVolume > 0)
-            //{
-            //    var compressedOres = _itemService.GetCompressedOres(skills, mineralList);
-            //    foreach (var ore in compressedOres.MarketItems)
-            //    {
-            //        oreList.Add(ore.Id, new ItemLookup
-            //        {
-            //            TypeId = ore.Id,
-            //            Qty = (int)ore.Qty,
-            //        });
-            //    }
-            //}
-
-            //OrderSummary oreSummary = null;
-            //OrderSummary orderSummary = null;
-
-            //if (oreList.Any())
-            //{
-            //    oreSummary = _itemService.GetItemPricing(oreList.Values.ToList());
-            //}
-
-            //if (itemList.Any())
-            //{
-            //    orderSummary = _itemService.GetItemPricing(itemList.Values.ToList());
-            //}
-
-            return PartialView(viewModel);
         }
 
         private void GatherBlueprintMaterials(BlueprintMaterialViewModel material, double mfgSystemCostIndex, Dictionary<long, ItemLookupViewModel> materialList, Dictionary<long, BlueprintLookupViewModel> blueprintList)

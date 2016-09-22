@@ -6,6 +6,6 @@ namespace EveMarket.Web.Models
 {
     public class BlueprintViewModel : BlueprintMaterialViewModel
     {
-        public decimal BlueprintPackCost { get; set; }
+        public decimal BpcPackCost { get; set; }
     }
 }

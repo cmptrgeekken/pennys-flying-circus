@@ -33,6 +33,6 @@ namespace EveMarket.Web.Models
         
 
         public List<BlueprintCalculationResultViewModel> BlueprintResults { get; set; }
-        public List<BlueprintLookupViewModel> BlueprintList { get; set; }
+        public BpcResultsViewModel BpcResults { get; set; }
     }
 }
