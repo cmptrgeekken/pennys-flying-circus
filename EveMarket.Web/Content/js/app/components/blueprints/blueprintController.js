@@ -58,7 +58,7 @@
         self.selectedBlueprints = [];
         self.baseCostCache = {};
 
-        addBlueprint(24483);
+        // addBlueprint(24483);
         updateSystemRates();
 
         function updateSystemRates() {
